@@ -1,27 +1,7 @@
-
-//
-// Vertex shader
-//
-var vertexShaderSource = `
-
-void main()
-{
-    gl_Position = vec4(0.0, 0.0, 0.0, 1.0);
-}
-
-`;
-
-//
-// Fragment shader
-//
-var fragmentShaderSource = `
-
-void main()
-{
-    gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
-}
-
-`;
+///
+// Global variables
+///
+var SHADER_PROGRAM;
 
 
 // Initialize WebGL or experimental WebGL
@@ -34,15 +14,6 @@ function initializeWebGL(canvas)
         alert("Error! Your browser may not support WebGL.");
     }
     return gl;
-}
-
-function initializeShaders()
-{
-    var vertexShader = gl.createShader(gl.VERTEX_SHADER);
-    var fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
-
-    var shaderProgram = gl.createProgram();
-    
 }
 
 
@@ -58,7 +29,6 @@ function main()
         gl.enable(gl.DEPTH_TEST);
         gl.depthFunc(gl.EQUAL);
     }
-
 
 
 
