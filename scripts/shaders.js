@@ -31,7 +31,7 @@ function initializeShaders()
     var fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
 
     gl.shaderSource(vertexShader, vertexShaderSource);
-    gl.shaderSource(fragmentShader, fragmentShaderSrouce);
+    gl.shaderSource(fragmentShader, fragmentShaderSource);
 
     gl.compileShader(vertexShader);
     if (!gl.getShaderParameter(vertexShader, gl.COMPILE_STATUS)) 

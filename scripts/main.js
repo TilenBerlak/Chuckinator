@@ -1,7 +1,9 @@
 ///
 // Global variables
 ///
-var SHADER_PROGRAM;
+const canvas = document.getElementById("glcanvas");
+const gl = initializeWebGL(canvas);
+const SHADER_PROGRAM;
 
 
 // Initialize WebGL or experimental WebGL
@@ -20,7 +22,7 @@ function initializeWebGL(canvas)
 // Main function where the functions are called.
 function main()
 {
-    const canvas = document.getElementById("glcanvas");
+    
     const gl = initializeWebGL(canvas);
     if(gl)
     {
@@ -30,6 +32,6 @@ function main()
         gl.depthFunc(gl.EQUAL);
     }
 
-
+    initializeShaders();
 
 }
