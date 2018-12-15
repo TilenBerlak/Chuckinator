@@ -1,19 +1,26 @@
 
+// Initialize WebGL or experimental WebGL
+function initializeWebGL(canvas)
+{
+    var gl = null;
+    gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
+    if(!gl)
+    {
+        alert("Error! Your browser may not support WebGL.");
+    }
+    return gl;
+}
+
+
+// Main function where the functions are called.
 function main()
 {
     const canvas = document.getElementById("glcanvas");
-    const gl = canvas.getContext("webgl");
-    
-    if(!gl)
+    const gl = initializeWebGL(canvas);
+    if(gl)
     {
-        console.log("WebGL not supported, falling back on experimental-webgl");
-        gl = canvas.getContext("experimental-webgl");
-        if(!gl)
-        {
-            alert("Your browser does not support WebGL");
-        }
+        gl.clearColor(0.75, 0.85, 0.8, 1.0);
+        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     }
 
-    gl.clearColor(0.75, 0.85, 0.8, 1.0);
-    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 }
