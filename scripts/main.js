@@ -1,29 +1,26 @@
 ///
 // Global variables
 ///
-const canvas = document.getElementById("glcanvas");
-const gl = initializeWebGL(canvas);
-const SHADER_PROGRAM;
+var canvas = document.getElementById("glcanvas");
+var gl = initializeWebGL(canvas);
+var SHADER_PROGRAM;
 
 
 // Initialize WebGL or experimental WebGL
 function initializeWebGL(canvas)
 {
-    var gl = null;
-    gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
-    if(!gl)
+    webgl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
+    if(!webgl)
     {
         alert("Error! Your browser may not support WebGL.");
     }
-    return gl;
+    return webgl;
 }
 
 
 // Main function where the functions are called.
 function main()
 {
-    
-    const gl = initializeWebGL(canvas);
     if(gl)
     {
         gl.clearColor(0.75, 0.85, 0.8, 1.0);
