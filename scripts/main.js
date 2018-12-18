@@ -91,21 +91,53 @@ function initilizeBuffers()
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(boxVertices), gl.STATIC_DRAW);
 
     var boxIndexBufferObject = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, boxIndexBufferObject);
-    gl.bufferData(gl.ARRAY_BUFFER, new Uint32Array(boxIndices), gl.STATIC_DRAW);
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, boxIndexBufferObject);
+    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(boxIndices), gl.STATIC_DRAW);
 
-    return 
-    {
-        boxVertexBufferObject: boxVertexBufferObject;
-        boxIndexBufferObject:   boxIndexBufferObject;
+	return {
+        boxVertexBufferObject:  boxVertexBufferObject,
+		boxIndexBufferObject:   boxIndexBufferObject,
+		boxIndicesLength:		boxIndices.length,
     }
 
 }
 
 // Drawing the cube on the screen
-function drawScene()
+function drawScene(buffers)
 {
-    
+
+	gl.bindBuffer(gl.ARRAY_BUFFER, buffers.boxVertexBufferObject);
+	gl.vertexAttribPointer(
+		SHADER_PROGRAM.aVertexPositionLocation,	// Attribute to send the buffer data to
+		3,										// How many values per iteration
+		gl.FLOAT,								// buffer data type
+		gl.FALSE,								// don't normalize
+		6 * Float32Array.BYTES_PER_ELEMENT,		// how many total elements are in iteration
+		0										// Offset
+	);
+	
+	gl.vertexAttribPointer(
+		SHADER_PROGRAM.aVertexColorLocation,
+		3,
+		gl.FLOAT,
+		gl.FALSE,
+		6 * Float32Array.BYTES_PER_ELEMENT,
+		3 * Float32Array.BYTES_PER_ELEMENT
+	);
+
+	var modelViewMatrix = new Float32Array(16);
+	var projectionMatrix = new Float32Array(16);
+
+	glMatrix.mat4.lookAt(modelViewMatrix, [3, 3, -8], [0, 0, 0], [0, 1, 0]);
+	glMatrix.mat4.perspective(projectionMatrix, 45 * (Math.PI / 180), canvas.width / canvas.height, 0.1, 1000.0);	
+
+	gl.uniformMatrix4fv(SHADER_PROGRAM.uModelViewMatrixLocation, gl.FALSE, modelViewMatrix);
+	gl.uniformMatrix4fv(SHADER_PROGRAM.uProjectionMatrixLocation, gl.FALSE, projectionMatrix);
+
+	gl.clearColor(0.75, 0.85, 0.8, 1.0);
+	gl.clear(gl.DEPTH_BUFFER_BIT | gl.COLOR_BUFFER_BIT);
+	gl.drawElements(gl.TRIANGLES, buffers.boxIndicesLength, gl.UNSIGNED_SHORT, 0);
+
 }
 
 
@@ -114,16 +146,18 @@ function main()
 {
     if(gl)
     {
-        gl.clearColor(0.75, 0.85, 0.8, 1.0);
-        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-        gl.enable(gl.DEPTH_TEST);
-        gl.depthFunc(gl.EQUAL);
+		gl.clearColor(0.75, 0.85, 0.8, 1.0);
+		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+		gl.enable(gl.DEPTH_TEST);
+		gl.enable(gl.CULL_FACE);
+		gl.frontFace(gl.CCW);
+		gl.cullFace(gl.BACK);
     }
 
 	initializeShaders();
 	
 	var buffers = initilizeBuffers();
-	
-	drawScene();
+
+	drawScene(buffers);
 
 }
