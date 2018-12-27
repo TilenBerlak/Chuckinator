@@ -4,18 +4,17 @@
 ///
 var vertexShaderSource = 
 `
-precision mediump float;
 attribute vec3 aVertexPosition;
-attribute vec3 aVertexColor;
+attribute vec2 aTextureCoord;
 
 uniform mat4 uModelViewMatrix;
 uniform mat4 uProjectionMatrix;
 
-varying vec3 vFragmentColor;
+varying highp vec2 vTextureCoord;
 
 void main()
 {
-    vFragmentColor = aVertexColor;
+    vTextureCoord = aTextureCoord;
     gl_Position = uProjectionMatrix * uModelViewMatrix * vec4(aVertexPosition, 1.0);
 }
 
@@ -26,12 +25,13 @@ void main()
 ///
 var fragmentShaderSource = 
 `
-precision mediump float;
-varying vec3 vFragmentColor;
+varying highp vec2 vTextureCoord;
+
+uniform sampler2D uSampler;
 
 void main()
 {
-    gl_FragColor = vec4(vFragmentColor, 1.0);
+    gl_FragColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
 }
 
 `;
@@ -86,11 +86,19 @@ function initializeShaders()
     gl.useProgram(SHADER_PROGRAM);
 
     SHADER_PROGRAM.aVertexPositionLocation = gl.getAttribLocation(SHADER_PROGRAM, "aVertexPosition");
-    SHADER_PROGRAM.aVertexColorLocation = gl.getAttribLocation(SHADER_PROGRAM, "aVertexColor");
+    SHADER_PROGRAM.aTextureCoordLocation = gl.getAttribLocation(SHADER_PROGRAM, "aTextureCoord");
 
     gl.enableVertexAttribArray(SHADER_PROGRAM.aVertexPositionLocation);
-    gl.enableVertexAttribArray(SHADER_PROGRAM.aVertexColorLocation);
+    gl.enableVertexAttribArray(SHADER_PROGRAM.aTextureCoordLocation);
 
     SHADER_PROGRAM.uModelViewMatrixLocation = gl.getUniformLocation(SHADER_PROGRAM, "uModelViewMatrix");
     SHADER_PROGRAM.uProjectionMatrixLocation = gl.getUniformLocation(SHADER_PROGRAM, "uProjectionMatrix");
+
+    SHADER_PROGRAM.samplerUniform = gl.getUniformLocation(SHADER_PROGRAM, "uSampler");
+}
+
+function setMatrixUniforms(modelViewMatrix, projectionMatrix)
+{
+    gl.uniformMatrix4fv(SHADER_PROGRAM.uModelViewMatrixLocation, gl.FALSE, modelViewMatrix);
+	gl.uniformMatrix4fv(SHADER_PROGRAM.uProjectionMatrixLocation, gl.FALSE, projectionMatrix);
 }
