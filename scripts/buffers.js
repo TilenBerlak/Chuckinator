@@ -1,4 +1,7 @@
-// data and buffers for a 3d cube
+/////
+// Vertex, index, textures data for 3d models.
+
+
 function initilizeBuffers()
 {
 	var boxVertices = 
@@ -65,7 +68,10 @@ function initilizeBuffers()
 		// Bottom
 		21, 20, 22,
 		22, 20, 23
-    ];
+	];
+	///
+	// Box buffers
+	///
 
     var boxVertexBufferObject = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, boxVertexBufferObject);
@@ -73,12 +79,73 @@ function initilizeBuffers()
 
     var boxIndexBufferObject = gl.createBuffer();
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, boxIndexBufferObject);
-    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(boxIndices), gl.STATIC_DRAW);
+	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(boxIndices), gl.STATIC_DRAW);
+	
+	///
+	//
+	///
+
+	///
+	// Hangar buffers
+	///
+
+	var hangarVertices = modelList["hangar"].meshes[0].vertices;
+	var hangarIndecies = [].concat.apply([], modelList["hangar"].meshes[0].faces);
+	var hangarTexCoords = modelList["hangar"].meshes[0].texturecoords[0];
+
+	var hangarVertexBuffer = gl.createBuffer();
+	gl.bindBuffer(gl.ARRAY_BUFFER, hangarVertexBuffer);
+	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(hangarVertices), gl.STATIC_DRAW);
+
+	var hangarTexCoordsVertexBuffer = gl.createBuffer();
+	gl.bindBuffer(gl.ARRAY_BUFFER, hangarTexCoordsVertexBuffer);
+	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(hangarTexCoords), gl.STATIC_DRAW);
+
+	var hangarIndexBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, hangarIndexBuffer);
+	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(hangarIndecies), gl.STATIC_DRAW);
+
+	///
+	//
+	///
+
+	///
+	// Hangar floor buffers
+	///
+
+	var hangarfloorVertices = modelList["hangarfloor"].meshes[0].vertices;
+	var hangarfloorIndecies = [].concat.apply([], modelList["hangarfloor"].meshes[0].faces);
+	var hangarfloorTexCoords = modelList["hangarfloor"].meshes[0].texturecoords[0];
+
+	var hangarfloorVertexBuffer = gl.createBuffer();
+	gl.bindBuffer(gl.ARRAY_BUFFER, hangarfloorVertexBuffer);
+	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(hangarfloorVertices), gl.STATIC_DRAW);
+
+	var hangarfloorTexCoordsVertexBuffer = gl.createBuffer();
+	gl.bindBuffer(gl.ARRAY_BUFFER, hangarfloorTexCoordsVertexBuffer);
+	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(hangarfloorTexCoords), gl.STATIC_DRAW);
+
+	var hangarfloorIndexBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, hangarfloorIndexBuffer);
+	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(hangarfloorIndecies), gl.STATIC_DRAW);
+
+
+
 
 	return {
         boxVertexBufferObject:  boxVertexBufferObject,
 		boxIndexBufferObject:   boxIndexBufferObject,
 		boxIndicesLength:		boxIndices.length,
+
+		hangarVertexBuffer:	hangarVertexBuffer,
+		hangarTexCoordsVertexBuffer: hangarTexCoordsVertexBuffer,
+		hangarIndexBuffer:			hangarIndexBuffer,
+		hangarIndeciesLength:		hangarIndecies.length,
+
+		hangarfloorVertexBuffer:	hangarfloorVertexBuffer,
+		hangarfloorTexCoordsVertexBuffer: hangarfloorTexCoordsVertexBuffer,
+		hangarfloorIndexBuffer:			hangarfloorIndexBuffer,
+		hangarfloorIndeciesLength:		hangarfloorIndecies.length,
     }
 
 }

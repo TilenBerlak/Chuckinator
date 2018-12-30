@@ -1,15 +1,20 @@
+/////
+// Camera class to handle movement around the scene.
+
 class camera
 {
     constructor()
     {
         this.pitch = 0;
         this.pitchRate = 0;
-        this.yaw = 90;
-        this.yawRate = 0;
-        this.xPosition = 8;
-        this.yPosition = 0.4;
-        this.zPosition = 4;
+        this.yaw = 180;
+        this.yawRate = 180;
+        this.xPosition = 0;
+        this.yPosition = 1;
+        this.zPosition = -7;
+        this.xPositionGun = 0;
         this.speed = 0;
+        this.maxSpeed = 0.012;
         this.lastTime = 0;
         this.currentlyPressedKeys = {};
     }
@@ -28,7 +33,7 @@ class camera
 
             }
 
-            this.yaw += this.yawRate * elapsed;
+            this.yaw += this.yawRate * elapsed;          
             this.pitch += this.pitchRate * elapsed;
         }
         this.lastTime = timeNow;
@@ -52,11 +57,11 @@ class camera
 
         if(this.currentlyPressedKeys[87])
         {
-            this.speed = 0.006;
+            this.speed = this.maxSpeed;
         }
         else if(this.currentlyPressedKeys[83])
         {
-            this.speed = -0.006;
+            this.speed = -this.maxSpeed;
         }
         else
         {

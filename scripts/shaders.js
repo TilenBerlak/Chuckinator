@@ -1,3 +1,6 @@
+////////////
+// Vertex and fragement shader and their setup
+
 
 ///
 // Vertex shader
@@ -100,5 +103,5 @@ function initializeShaders()
 function setMatrixUniforms(modelViewMatrix, projectionMatrix)
 {
     gl.uniformMatrix4fv(SHADER_PROGRAM.uModelViewMatrixLocation, gl.FALSE, modelViewMatrix);
-	gl.uniformMatrix4fv(SHADER_PROGRAM.uProjectionMatrixLocation, gl.FALSE, projectionMatrix);
+    gl.uniformMatrix4fv(SHADER_PROGRAM.uProjectionMatrixLocation, gl.FALSE, projectionMatrix);
 }
