@@ -7,7 +7,9 @@ function drawBox(buffers, x, y, z, angle)
 
     glMatrix.mat4.translate(modelViewMatrix, modelViewMatrix, [x, y, z]);
 	glMatrix.mat4.rotate(modelViewMatrix, modelViewMatrix, degToRad(angle), [0, 1, 0]);
+	
 	gl.bindBuffer(gl.ARRAY_BUFFER, buffers.boxVertexBufferObject);
+	// Setting vertecies
 	gl.vertexAttribPointer(
 		SHADER_PROGRAM.aVertexPositionLocation,	// Attribute to send the buffer data to
 		3,										// How many values per iteration
@@ -17,7 +19,19 @@ function drawBox(buffers, x, y, z, angle)
 		0										// Offset
 	);
 
+	// Setting normals
+	gl.bindBuffer(gl.ARRAY_BUFFER, buffers.boxVertexNormalBuffer);
+	gl.vertexAttribPointer(
+		SHADER_PROGRAM.aVertexNormalLocation,
+		3,
+		gl.FLOAT,
+		gl.FALSE,
+		0,
+		0,
+	);
+
 	// Setting a texture
+	gl.bindBuffer(gl.ARRAY_BUFFER, buffers.boxVertexBufferObject);
 	gl.vertexAttribPointer(
 		SHADER_PROGRAM.aTextureCoordLocation,
 		2,

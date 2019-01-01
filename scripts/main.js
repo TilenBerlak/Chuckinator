@@ -5,6 +5,8 @@ var canvas = document.getElementById("glcanvas");
 var gl = initializeWebGL(canvas);
 var SHADER_PROGRAM;
 var texturesLoaded = false;
+var lighting = true;
+
 
 // Matrices
 var modelViewMatrixStack = [];
@@ -97,6 +99,7 @@ function drawScene(objCamera, buffers)
 	glMatrix.mat4.translate(modelViewMatrix, modelViewMatrix, [0, 31, 200]);
 	glMatrix.mat4.rotate(modelViewMatrix, modelViewMatrix, degToRad(-90), [1, 0, 0]);
 	
+	// Vertices
 	gl.bindBuffer(gl.ARRAY_BUFFER, buffers.hangarVertexBuffer);
 	gl.vertexAttribPointer(
 		SHADER_PROGRAM.aVertexPositionLocation,	// Attribute to send the buffer data to
@@ -107,6 +110,18 @@ function drawScene(objCamera, buffers)
 		0										// Offset
 	);
 
+	// Normals
+	gl.bindBuffer(gl.ARRAY_BUFFER, buffers.hangarNormalsBuffer);
+	gl.vertexAttribPointer(
+		SHADER_PROGRAM.aVertexNormalLocation,
+		3,
+		gl.FLOAT,
+		gl.FALSE,
+		0,
+		0,
+	);
+	
+	// Textures
 	gl.bindBuffer(gl.ARRAY_BUFFER, buffers.hangarTexCoordsVertexBuffer);
 	gl.vertexAttribPointer(
 		SHADER_PROGRAM.aTextureCoordLocation,	// Attribute to send the buffer data to
@@ -131,10 +146,12 @@ function drawScene(objCamera, buffers)
 	// Hangar floor model
 
 	modelViewPushMatrix();
-
-	glMatrix.mat4.translate(modelViewMatrix, modelViewMatrix, [0.0, -1, 60]);
-	glMatrix.mat4.scale(modelViewMatrix, modelViewMatrix, [140, 0.1, 150]);
 	
+	glMatrix.mat4.translate(modelViewMatrix, modelViewMatrix, [0.0, -1, 60]);
+	//glMatrix.mat4.rotate(modelViewMatrix, modelViewMatrix, degToRad(-90), [1, 0, 0]);
+	glMatrix.mat4.scale(modelViewMatrix, modelViewMatrix, [140, 0.1, 150]);
+
+	// Vertecies
 	gl.bindBuffer(gl.ARRAY_BUFFER, buffers.hangarfloorVertexBuffer);
 	gl.vertexAttribPointer(
 		SHADER_PROGRAM.aVertexPositionLocation,	// Attribute to send the buffer data to
@@ -145,6 +162,18 @@ function drawScene(objCamera, buffers)
 		0										// Offset
 	);
 
+	// Normals
+	gl.bindBuffer(gl.ARRAY_BUFFER, buffers.hangarfloorNormalsBuffer);
+	gl.vertexAttribPointer(
+		SHADER_PROGRAM.aVertexNormalLocation,
+		3,
+		gl.FLOAT,
+		gl.FALSE,
+		0,
+		0,
+	);
+
+	// Textures
 	gl.bindBuffer(gl.ARRAY_BUFFER, buffers.hangarfloorTexCoordsVertexBuffer);
 	gl.vertexAttribPointer(
 		SHADER_PROGRAM.aTextureCoordLocation,	// Attribute to send the buffer data to
@@ -164,6 +193,8 @@ function drawScene(objCamera, buffers)
 
 	modelViewPopMatrix();
 	////////////////////////////////////////
+
+	useLighting();
 
 }
 
