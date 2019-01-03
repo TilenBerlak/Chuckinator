@@ -27,9 +27,18 @@ function initTextures()
     metalTexture.image = new Image();
     metalTexture.image.onload = function() 
     {
-        handleTextureLoaded(metalTexture, true);
+        handleTextureLoaded(metalTexture, false);
     }   
     metalTexture.image.src = "./assets/metal.png";
+
+
+    gunTexture = gl.createTexture();
+    gunTexture.image = new Image();
+    gunTexture.image.onload = function() 
+    {
+        handleTextureLoaded(gunTexture, true);
+    }   
+    gunTexture.image.src = "./assets/guntexture.png";
 }
 
 function handleTextureLoaded(texture, checkTextures)

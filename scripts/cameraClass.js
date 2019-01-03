@@ -9,6 +9,7 @@ class camera
         this.pitchRate = 0;
         this.yaw = 180;
         this.yawRate = 180;
+        this.joggingAngle = 0;
         this.xPosition = 0;
         this.yPosition = 1;
         this.zPosition = -7;
@@ -31,9 +32,10 @@ class camera
                 this.xPosition -= Math.sin(degToRad(this.yaw)) * this.speed * elapsed;
                 this.zPosition -= Math.cos(degToRad(this.yaw)) * this.speed * elapsed;
 
+                this.joggingAngle += elapsed * 0.8; // 0.8 "fiddle factor" - makes it feel more realistic :-)
+                this.yPosition = Math.sin(degToRad(this.joggingAngle)) / 20 + 0.8
             }
-
-            this.yaw += this.yawRate * elapsed;          
+            this.yaw += this.yawRate * elapsed;
             this.pitch += this.pitchRate * elapsed;
         }
         this.lastTime = timeNow;
@@ -66,6 +68,25 @@ class camera
         else
         {
             this.speed = 0;
+        }
+
+
+        if (this.currentlyPressedKeys[33] && this.pitch < 45) 
+        {
+            // Page Up
+            this.pitchRate = 0.1;
+        } 
+        else if (this.currentlyPressedKeys[34] && this.pitch > -45) 
+        {
+            // Page Down
+
+            this.pitchRate = -0.1;
+
+
+        } 
+        else 
+        {
+            this.pitchRate = 0;
         }
     }
 

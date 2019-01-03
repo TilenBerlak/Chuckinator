@@ -69,6 +69,45 @@ function initilizeBuffers()
 		21, 20, 22,
 		22, 20, 23
 	];
+		
+	var vertexNormals = 
+	[
+	// Front face
+		0.0,  0.0,  1.0,
+		0.0,  0.0,  1.0,
+		0.0,  0.0,  1.0,
+		0.0,  0.0,  1.0,
+
+	// Back face
+		0.0,  0.0, -1.0,
+		0.0,  0.0, -1.0,
+		0.0,  0.0, -1.0,
+		0.0,  0.0, -1.0,
+
+	// Top face
+		0.0,  1.0,  0.0,
+		0.0,  1.0,  0.0,
+		0.0,  1.0,  0.0,
+		0.0,  1.0,  0.0,
+
+	// Bottom face
+		0.0, -1.0,  0.0,
+		0.0, -1.0,  0.0,
+		0.0, -1.0,  0.0,
+		0.0, -1.0,  0.0,
+
+	// Right face
+		1.0,  0.0,  0.0,
+		1.0,  0.0,  0.0,
+		1.0,  0.0,  0.0,
+		1.0,  0.0,  0.0,
+
+	// Left face
+	-1.0,  0.0,  0.0,
+	-1.0,  0.0,  0.0,
+	-1.0,  0.0,  0.0,
+	-1.0,  0.0,  0.0
+];
 	///
 	// Box buffers
 	///
@@ -79,48 +118,7 @@ function initilizeBuffers()
 
 	var boxVertexNormalBuffer = gl.createBuffer();
 	gl.bindBuffer(gl.ARRAY_BUFFER, boxVertexNormalBuffer);
-
-	 // Now create an array of vertex normals for the cube.
-	 var vertexNormals = [
-		// Front face
-		 0.0,  0.0,  1.0,
-		 0.0,  0.0,  1.0,
-		 0.0,  0.0,  1.0,
-		 0.0,  0.0,  1.0,
-  
-		// Back face
-		 0.0,  0.0, -1.0,
-		 0.0,  0.0, -1.0,
-		 0.0,  0.0, -1.0,
-		 0.0,  0.0, -1.0,
-  
-		// Top face
-		 0.0,  1.0,  0.0,
-		 0.0,  1.0,  0.0,
-		 0.0,  1.0,  0.0,
-		 0.0,  1.0,  0.0,
-  
-		// Bottom face
-		 0.0, -1.0,  0.0,
-		 0.0, -1.0,  0.0,
-		 0.0, -1.0,  0.0,
-		 0.0, -1.0,  0.0,
-  
-		// Right face
-		 1.0,  0.0,  0.0,
-		 1.0,  0.0,  0.0,
-		 1.0,  0.0,  0.0,
-		 1.0,  0.0,  0.0,
-  
-		// Left face
-		-1.0,  0.0,  0.0,
-		-1.0,  0.0,  0.0,
-		-1.0,  0.0,  0.0,
-		-1.0,  0.0,  0.0
-	];
-
 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertexNormals), gl.STATIC_DRAW);
-
 
     var boxIndexBufferObject = gl.createBuffer();
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, boxIndexBufferObject);
@@ -186,8 +184,30 @@ function initilizeBuffers()
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, hangarfloorIndexBuffer);
 	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(hangarfloorIndecies), gl.STATIC_DRAW);
 
+	////////////////////////
+	// Gun buffers
 
+	var gunVertices = modelList["gun"].meshes[0].vertices;
+	var gunIndecies = [].concat.apply([], modelList["gun"].meshes[0].faces);
+	var gunTexCoords = modelList["gun"].meshes[0].texturecoords[0];
+	var gunNormals = modelList["gun"].meshes[0].normals;
 
+	var gunVertexBuffer = gl.createBuffer();
+	gl.bindBuffer(gl.ARRAY_BUFFER, gunVertexBuffer);
+	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(gunVertices), gl.STATIC_DRAW);
+
+	var gunNormalsBuffer = gl.createBuffer();
+	gl.bindBuffer(gl.ARRAY_BUFFER, gunNormalsBuffer);
+	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(gunNormals), gl.STATIC_DRAW);
+
+	var gunTexCoordsBuffer = gl.createBuffer();
+	gl.bindBuffer(gl.ARRAY_BUFFER, gunTexCoordsBuffer);
+	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(gunTexCoords), gl.STATIC_DRAW);
+
+	var gunIndexBuffer = gl.createBuffer();
+	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, gunIndexBuffer);
+	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(gunIndecies), gl.STATIC_DRAW);
+	
 
 	return {
         boxVertexBufferObject:  boxVertexBufferObject,
@@ -195,17 +215,23 @@ function initilizeBuffers()
 		boxIndicesLength:		boxIndices.length,
 		boxVertexNormalBuffer:  boxVertexNormalBuffer,
 
-		hangarVertexBuffer:	hangarVertexBuffer,
+		hangarVertexBuffer:			hangarVertexBuffer,
 		hangarTexCoordsVertexBuffer: hangarTexCoordsVertexBuffer,
 		hangarIndexBuffer:			hangarIndexBuffer,
 		hangarIndeciesLength:		hangarIndecies.length,
 		hangarNormalsBuffer:		hangarNormalsBuffer,
 
-		hangarfloorVertexBuffer:	hangarfloorVertexBuffer,
+		hangarfloorVertexBuffer:		  hangarfloorVertexBuffer,
 		hangarfloorTexCoordsVertexBuffer: hangarfloorTexCoordsVertexBuffer,
-		hangarfloorIndexBuffer:			hangarfloorIndexBuffer,
-		hangarfloorIndeciesLength:		hangarfloorIndecies.length,
-		hangarfloorNormalsBuffer:		hangarfloorNormalsBuffer,
+		hangarfloorIndexBuffer:			  hangarfloorIndexBuffer,
+		hangarfloorIndeciesLength:		  hangarfloorIndecies.length,
+		hangarfloorNormalsBuffer:		  hangarfloorNormalsBuffer,
+
+		gunVertexBuffer:				gunVertexBuffer,
+		gunNormalsBuffer:				gunNormalsBuffer,
+		gunTexCoordsBuffer:				gunTexCoordsBuffer,
+		gunIndexBuffer:					gunIndexBuffer,
+		gunIndeciesLength:				gunIndecies.length,
 	}
 
 }

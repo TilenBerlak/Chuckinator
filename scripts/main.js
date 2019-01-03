@@ -44,8 +44,23 @@ function initializeResources()
 				}
 				else
 				{
-					modelList["hangarfloor"] = modelObj;					
-					main();
+					modelList["hangarfloor"] = modelObj;
+					loadJSONResource("./assets/gun.json", function(modelErr, modelObj)
+					{
+						console.log(modelObj);
+						if(modelErr)
+						{
+							alert("Fatal error getting gun model.");
+						}
+						else
+						{
+
+							modelList["gun"] = modelObj;
+							main();
+						}
+					});
+					
+					
 				}
 			});
 		}
@@ -73,14 +88,18 @@ function drawScene(objCamera, buffers)
 	gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
 	gl.clearColor(0.53, 0.81, 0.8, 0.98);
 	gl.clear(gl.DEPTH_BUFFER_BIT | gl.COLOR_BUFFER_BIT);
-
+		
 	glMatrix.mat4.perspective(projectionMatrix, 45 * (Math.PI / 180), gl.viewportWidth / gl.viewportHeight, 0.1, 1000.0);
+	
+	useLighting();
+	
 	glMatrix.mat4.identity(modelViewMatrix);
 
-	//glMatrix.mat4.rotate(modelViewMatrix, modelViewMatrix, degToRad(-pitch), [1, 0, 0]);
+	glMatrix.mat4.rotate(modelViewMatrix, modelViewMatrix, degToRad(-objCamera.pitch), [1, 0, 0]);
 	glMatrix.mat4.rotate(modelViewMatrix, modelViewMatrix, degToRad(-objCamera.yaw), [0, 1, 0]);
 	glMatrix.mat4.translate(modelViewMatrix, modelViewMatrix, [-objCamera.xPosition, -objCamera.yPosition, -objCamera.zPosition]);
-			
+
+
 	//////////////////////////
 	// Box crates
 	///
@@ -91,111 +110,21 @@ function drawScene(objCamera, buffers)
 
 	drawBox(buffers, 3, 0.1, -2, 0);
 
+	
 	/////////////////////////
 	// Hangar model
 
-	modelViewPushMatrix();
-
-	glMatrix.mat4.translate(modelViewMatrix, modelViewMatrix, [0, 31, 200]);
-	glMatrix.mat4.rotate(modelViewMatrix, modelViewMatrix, degToRad(-90), [1, 0, 0]);
-	
-	// Vertices
-	gl.bindBuffer(gl.ARRAY_BUFFER, buffers.hangarVertexBuffer);
-	gl.vertexAttribPointer(
-		SHADER_PROGRAM.aVertexPositionLocation,	// Attribute to send the buffer data to
-		3,										// How many values per iteration
-		gl.FLOAT,								// buffer data type
-		gl.FALSE,								// don't normalize
-		3 * Float32Array.BYTES_PER_ELEMENT,		// how many total elements are in iteration
-		0										// Offset
-	);
-
-	// Normals
-	gl.bindBuffer(gl.ARRAY_BUFFER, buffers.hangarNormalsBuffer);
-	gl.vertexAttribPointer(
-		SHADER_PROGRAM.aVertexNormalLocation,
-		3,
-		gl.FLOAT,
-		gl.FALSE,
-		0,
-		0,
-	);
-	
-	// Textures
-	gl.bindBuffer(gl.ARRAY_BUFFER, buffers.hangarTexCoordsVertexBuffer);
-	gl.vertexAttribPointer(
-		SHADER_PROGRAM.aTextureCoordLocation,	// Attribute to send the buffer data to
-		2,										// How many values per iteration
-		gl.FLOAT,								// buffer data type
-		gl.FALSE,								// don't normalize
-		2 * Float32Array.BYTES_PER_ELEMENT,		// how many total elements are in iteration
-		0										// Offset
-	);
-	gl.bindTexture(gl.TEXTURE_2D, concreteTexture);
-	gl.activeTexture(gl.TEXTURE0);
-	gl.uniform1i(SHADER_PROGRAM.samplerUniform, 0);
-
-	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffers.hangarIndexBuffer);
-	setMatrixUniforms(modelViewMatrix, projectionMatrix);
-	gl.drawElements(gl.TRIANGLES, buffers.hangarIndeciesLength, gl.UNSIGNED_SHORT, 0);
-
-	modelViewPopMatrix();
-	////////////////////////////////////////
+	drawHangar(buffers);
 
 	/////////////////
 	// Hangar floor model
 
-	modelViewPushMatrix();
-	
-	glMatrix.mat4.translate(modelViewMatrix, modelViewMatrix, [0.0, -1, 60]);
-	//glMatrix.mat4.rotate(modelViewMatrix, modelViewMatrix, degToRad(-90), [1, 0, 0]);
-	glMatrix.mat4.scale(modelViewMatrix, modelViewMatrix, [140, 0.1, 150]);
+	drawHangarFloor(buffers);
 
-	// Vertecies
-	gl.bindBuffer(gl.ARRAY_BUFFER, buffers.hangarfloorVertexBuffer);
-	gl.vertexAttribPointer(
-		SHADER_PROGRAM.aVertexPositionLocation,	// Attribute to send the buffer data to
-		3,										// How many values per iteration
-		gl.FLOAT,								// buffer data type
-		gl.FALSE,								// don't normalize
-		3 * Float32Array.BYTES_PER_ELEMENT,		// how many total elements are in iteration
-		0										// Offset
-	);
-
-	// Normals
-	gl.bindBuffer(gl.ARRAY_BUFFER, buffers.hangarfloorNormalsBuffer);
-	gl.vertexAttribPointer(
-		SHADER_PROGRAM.aVertexNormalLocation,
-		3,
-		gl.FLOAT,
-		gl.FALSE,
-		0,
-		0,
-	);
-
-	// Textures
-	gl.bindBuffer(gl.ARRAY_BUFFER, buffers.hangarfloorTexCoordsVertexBuffer);
-	gl.vertexAttribPointer(
-		SHADER_PROGRAM.aTextureCoordLocation,	// Attribute to send the buffer data to
-		2,										// How many values per iteration
-		gl.FLOAT,								// buffer data type
-		gl.FALSE,								// don't normalize
-		2 * Float32Array.BYTES_PER_ELEMENT,		// how many total elements are in iteration
-		0										// Offset
-	);
-	gl.bindTexture(gl.TEXTURE_2D, metalTexture);
-	gl.activeTexture(gl.TEXTURE0);
-	gl.uniform1i(SHADER_PROGRAM.samplerUniform, 0);
-
-	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffers.hangarfloorIndexBuffer);
-	setMatrixUniforms(modelViewMatrix, projectionMatrix);
-	gl.drawElements(gl.TRIANGLES, buffers.hangarfloorIndeciesLength, gl.UNSIGNED_SHORT, 0);
-
-	modelViewPopMatrix();
 	////////////////////////////////////////
 
-	useLighting();
-
+	drawGun(buffers, objCamera);
+	
 }
 
 // Main function where the functions are called.

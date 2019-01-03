@@ -15,9 +15,10 @@ uniform mat4 uModelViewMatrix;
 uniform mat4 uProjectionMatrix;
 uniform mat3 uNormalMatrix;
 
-uniform vec3 uAmbientColor;         // Used for lighting
-uniform vec3 uLightingDirection;    // Used for lighting
-uniform vec3 uDirectionalColor;     // Used for lighting
+uniform vec3 uAmbientColor;             // Used for lighting
+
+uniform vec3 uPointLightingPosition;    // Used for lighting
+uniform vec3 uPointLightingColor;         // Used for lighting
 
 uniform bool uUseLighting;          // Used for lighting
 
@@ -27,7 +28,9 @@ varying vec3 vLightWeighting;       // Used for lighting
 void main()
 {
     vTextureCoord = aTextureCoord;
-    gl_Position = uProjectionMatrix * uModelViewMatrix * vec4(aVertexPosition, 1.0);
+
+    vec4 mvPosition = uModelViewMatrix * vec4(aVertexPosition, 1.0); 
+    gl_Position = uProjectionMatrix * mvPosition;
 
     if(!uUseLighting)
     {
@@ -35,9 +38,10 @@ void main()
     }
     else
     {
+        vec3 lightDirection = normalize(uPointLightingPosition - mvPosition.xyz);
         vec3 transformedNormal = uNormalMatrix * aVertexNormal;
-        float directionalLightWeighting = max(dot(transformedNormal, uLightingDirection), 0.0);
-        vLightWeighting = uAmbientColor + uDirectionalColor * directionalLightWeighting;   
+        float directionalLightWeighting = max(dot(transformedNormal, lightDirection), 0.0);
+        vLightWeighting = uAmbientColor + uPointLightingColor * directionalLightWeighting;   
 
     }
 
@@ -128,8 +132,8 @@ function initializeShaders()
 
     SHADER_PROGRAM.uUseLightingLocation = gl.getUniformLocation(SHADER_PROGRAM, "uUseLighting");
     SHADER_PROGRAM.uAmbientColorLocation = gl.getUniformLocation(SHADER_PROGRAM, "uAmbientColor");
-    SHADER_PROGRAM.uLightingDirectionLocation = gl.getUniformLocation(SHADER_PROGRAM, "uLightingDirection");
-    SHADER_PROGRAM.uDirectionalColorLocation = gl.getUniformLocation(SHADER_PROGRAM, "uDirectionalColor");
+    SHADER_PROGRAM.uPointLightingPositionLocation = gl.getUniformLocation(SHADER_PROGRAM, "uPointLightingPosition");
+    SHADER_PROGRAM.uPointLightingColorLocation = gl.getUniformLocation(SHADER_PROGRAM, "uPointLightingColor");
 
 
     SHADER_PROGRAM.samplerUniform = gl.getUniformLocation(SHADER_PROGRAM, "uSampler");
