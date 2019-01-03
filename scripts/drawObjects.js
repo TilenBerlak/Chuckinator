@@ -41,7 +41,7 @@ function drawBox(buffers, x, y, z, angle)
 		3 * Float32Array.BYTES_PER_ELEMENT,
 	);
 
-	gl.bindTexture(gl.TEXTURE_2D, cubeTexture);
+	gl.bindTexture(gl.TEXTURE_2D, textureList["crate"]);
 	gl.activeTexture(gl.TEXTURE0);
 	gl.uniform1i(SHADER_PROGRAM.samplerUniform, 0);
 
@@ -94,7 +94,7 @@ function drawHangar(buffers)
 		2 * Float32Array.BYTES_PER_ELEMENT,		// how many total elements are in iteration
 		0										// Offset
 	);
-	gl.bindTexture(gl.TEXTURE_2D, concreteTexture);
+	gl.bindTexture(gl.TEXTURE_2D, textureList["concrete"]);
 	gl.activeTexture(gl.TEXTURE0);
 	gl.uniform1i(SHADER_PROGRAM.samplerUniform, 0);
 
@@ -145,7 +145,7 @@ function drawHangarFloor(buffers)
 		2 * Float32Array.BYTES_PER_ELEMENT,		// how many total elements are in iteration
 		0										// Offset
 	);
-	gl.bindTexture(gl.TEXTURE_2D, metalTexture);
+	gl.bindTexture(gl.TEXTURE_2D, textureList["metal"]);
 	gl.activeTexture(gl.TEXTURE0);
 	gl.uniform1i(SHADER_PROGRAM.samplerUniform, 0);
 

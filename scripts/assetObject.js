@@ -1,4 +1,4 @@
-class assetObject {
+class AssetObject {
     constructor(model, texture, position = [0, 0, 0], scale = [1, 1, 1], rotate = [0, 0, 0]) {
         this.vertexBuffer = null;
         this.normalsBuffer = null;
@@ -24,15 +24,29 @@ class assetObject {
         this.position[2] = z;
     }
 
-    draw() {
-        modelViewPushMatrix();
+    rotateX(x) {
+        this.rotate[0] = x;
+    }
 
+    rotateY(y) {
+        this.rotate[1] = y;
+    }
+
+    rotateZ(z) {
+        this.rotate[2] = z;
+    }
+
+    _tranformate(glMatrix, modelViewMatrix) {
         glMatrix.mat4.translate(modelViewMatrix, modelViewMatrix, this.position);
-        glMatrix.mat4.rotate(modelViewMatrix, modelViewMatrix, degToRad(this.rotate[1]), [0, 1, 0]);
-
-        glMatrix.mat4.rotate(modelViewMatrix, modelViewMatrix, degToRad(this.rotate[2]), [0, 0, 1]);
         glMatrix.mat4.rotate(modelViewMatrix, modelViewMatrix, degToRad(this.rotate[0]), [1, 0, 0]);
+        glMatrix.mat4.rotate(modelViewMatrix, modelViewMatrix, degToRad(this.rotate[1]), [0, 1, 0]);
+        glMatrix.mat4.rotate(modelViewMatrix, modelViewMatrix, degToRad(this.rotate[2]), [0, 0, 1]);
         glMatrix.mat4.scale(modelViewMatrix, modelViewMatrix, this.scale);
+    }
+
+    draw(glMatrix, modelViewMatrix) {
+        modelViewPushMatrix();
+        this._tranformate(glMatrix, modelViewMatrix);
         // Vertices
         gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexBuffer);
         gl.vertexAttribPointer(

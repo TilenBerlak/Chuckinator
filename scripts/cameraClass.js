@@ -1,23 +1,23 @@
 /////
 // Camera class to handle movement around the scene.
 
-class camera {
-    constructor() {
+class Camera {
+    constructor(position = [0, 0, 0]) {
         this.pitch = 0;
         this.pitchRate = 0;
         this.yaw = 180;
         this.yawRate = 0;
         this.joggingAngle = 0;
-        this.xPosition = 0;
-        this.yPosition = 1;
-        this.zPosition = -7;
-        this.xPositionGun = 0;
+        this.xPosition = position[0];
+        this.yPosition = position[1];
+        this.zPosition = position[2];
         this.speed = 0;
         this.direction = 0;
         this.lastTime = 0;
         this.yVelocity = 0;
         this.onGround = true;
         this.currentlyPressedKeys = {};
+        // this.gunAsset = gunAsset;
     }
 
     animate() {
@@ -43,17 +43,28 @@ class camera {
                 }
             }
 
-            console.log(this.yPosition);
-
-
             this.yaw += this.yawRate * elapsed;
             this.pitch += this.pitchRate * elapsed;
+
+            console.log("Y: " + this.yaw + " P: " + this.pitch);
             //reset yaw and pitch rate so it stops when mouse is not moving
             this.yawRate = 0;
             this.pitchRate = 0;
+
+            // this.gunAsset.position = [this.xPosition - 0.1, this.yPosition - 0.8, this.zPosition + 3];
+            // this.gunAsset.rotate = [0, this.yaw - 90, this.pitch - 90];
+
+            // let gun = new GunAssetObject([-0.9, 0.2, -4], [0.25, 0.25, 0.25], [0, -98, -90]);
+            // objCamera = new Camera([0, 1, -7], gun);
         }
         this.lastTime = timeNow;
 
+    }
+
+    moveToCamera(glMatrix, modelViewMatrix) {
+        glMatrix.mat4.rotate(modelViewMatrix, modelViewMatrix, degToRad(-this.pitch), [1, 0, 0]);
+        glMatrix.mat4.rotate(modelViewMatrix, modelViewMatrix, degToRad(-this.yaw), [0, 1, 0]);
+        glMatrix.mat4.translate(modelViewMatrix, modelViewMatrix, [-this.xPosition, -this.yPosition, -this.zPosition]);
     }
 
     handleMouseMove(event) {
@@ -64,6 +75,15 @@ class camera {
     handleKeys() {
         this.speed = 0;
         this.direction = 0;
+
+        if(this.currentlyPressedKeys[79]) {
+            gameObjects[0].offset++;
+            this.currentlyPressedKeys[79] = false;
+        }
+        if(this.currentlyPressedKeys[80]) {
+            gameObjects[0].offset--;
+            this.currentlyPressedKeys[80] = false;
+        }
 
         //dummy way to set direction, could be improved
         if (this.currentlyPressedKeys[87]) {
@@ -130,7 +150,7 @@ class camera {
     }
 
     handleKeyDown(event) {
-        console.log(event.keyCode)
+        console.log(event.keyCode);
         this.currentlyPressedKeys[event.keyCode] = true;
     }
 
