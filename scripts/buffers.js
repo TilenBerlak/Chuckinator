@@ -69,8 +69,8 @@ function initilizeBuffers()
 		21, 20, 22,
 		22, 20, 23
 	];
-		
-	var vertexNormals = 
+
+	var vertexNormals =
 	[
 	// Front face
 		0.0,  0.0,  1.0,
@@ -125,7 +125,7 @@ function initilizeBuffers()
 	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(boxIndices), gl.STATIC_DRAW);
 
 
-	
+
 	///
 	//
 	///
@@ -207,7 +207,7 @@ function initilizeBuffers()
 	var gunIndexBuffer = gl.createBuffer();
 	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, gunIndexBuffer);
 	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(gunIndecies), gl.STATIC_DRAW);
-	
+
 
 	return {
         boxVertexBufferObject:  boxVertexBufferObject,

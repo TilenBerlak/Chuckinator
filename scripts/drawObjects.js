@@ -7,7 +7,7 @@ function drawBox(buffers, x, y, z, angle)
 
     glMatrix.mat4.translate(modelViewMatrix, modelViewMatrix, [x, y, z]);
 	glMatrix.mat4.rotate(modelViewMatrix, modelViewMatrix, degToRad(angle), [0, 1, 0]);
-	
+
 	gl.bindBuffer(gl.ARRAY_BUFFER, buffers.boxVertexBufferObject);
 	// Setting vertecies
 	gl.vertexAttribPointer(
@@ -61,7 +61,7 @@ function drawHangar(buffers)
 
 	glMatrix.mat4.translate(modelViewMatrix, modelViewMatrix, [0, 31, 200]);
 	glMatrix.mat4.rotate(modelViewMatrix, modelViewMatrix, degToRad(-90), [1, 0, 0]);
-	
+
 	// Vertices
 	gl.bindBuffer(gl.ARRAY_BUFFER, buffers.hangarVertexBuffer);
 	gl.vertexAttribPointer(
@@ -108,7 +108,7 @@ function drawHangar(buffers)
 function drawHangarFloor(buffers)
 {
 	modelViewPushMatrix();
-	
+
 	glMatrix.mat4.translate(modelViewMatrix, modelViewMatrix, [0.0, -1, 60]);
 	//glMatrix.mat4.rotate(modelViewMatrix, modelViewMatrix, degToRad(-90), [1, 0, 0]);
 	glMatrix.mat4.scale(modelViewMatrix, modelViewMatrix, [140, 0.1, 150]);

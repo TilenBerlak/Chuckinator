@@ -31,7 +31,7 @@ var loadImage = function (url, callback)
 	image.src = url;
 }
 
-function loadJSONResource(url, callback)
+function loadJSONResource(name, url, callback)
 {
     loadTextResource(url, function (err, result) 
     {
@@ -43,7 +43,7 @@ function loadJSONResource(url, callback)
         {
             try 
             {
-				callback(null, JSON.parse(result));
+				callback(null, JSON.parse(result), name);
             } 
             catch (e) 
             {

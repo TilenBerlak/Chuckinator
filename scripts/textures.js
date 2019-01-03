@@ -34,10 +34,10 @@ function initTextures()
 
     gunTexture = gl.createTexture();
     gunTexture.image = new Image();
-    gunTexture.image.onload = function() 
+    gunTexture.image.onload = function()
     {
         handleTextureLoaded(gunTexture, true);
-    }   
+    }
     gunTexture.image.src = "./assets/guntexture.png";
 }
 

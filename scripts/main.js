@@ -16,56 +16,49 @@ var projectionMatrix = new Float32Array(16);
 // Loading models
 var modelList = {};
 
+// Camera
+var objCamera = null; //initialized in main
+
+// Game configuration
+var gameConfiguration = {
+	mouseSpeed: 100, // between 50 and 150
+	gravity: 0.005, // gravity for jumping
+    jumpFactor: 0.2, // jump factor (press half factor is used, long press up to this factor is used)
+	runSpeed: 0.012, //character speed
+};
 ///
 //
 ///
 
+/*************************/
+/******** DRAWING ********/
+/*************************/
 ///////////////////
 // Loading models from JSON files.
 
 function initializeResources()
 {
-	loadJSONResource("./assets/hangar.json", function(modelErr, modelObj)
-	{
-		console.log(modelObj);
-		if(modelErr)
-		{
-			alert("Fatal error getting hangar model.");
-		}
-		else
-		{
-			modelList["hangar"] = modelObj;
-			loadJSONResource("./assets/hangarfloor.json", function(modelErr, modelObj)
-			{
-				console.log(modelObj);
-				if(modelErr)
-				{
-					alert("Fatal error getting hangarfloor model.");
-				}
-				else
-				{
-					modelList["hangarfloor"] = modelObj;
-					loadJSONResource("./assets/gun.json", function(modelErr, modelObj)
-					{
-						console.log(modelObj);
-						if(modelErr)
-						{
-							alert("Fatal error getting gun model.");
-						}
-						else
-						{
+	var assets = ["hangar", "hangarfloor", "gun"];
 
-							modelList["gun"] = modelObj;
-							main();
-						}
-					});
-					
-					
+	for(var i=0, loadedAssets = assets.length; i<assets.length; i++) {
+		var asset = assets[i];
+		loadJSONResource(asset, "./assets/" + asset + ".json", function (modelErr, modelObj, name) {
+			if(modelErr) {
+				alert("Fatal error getting " + name + "model!");
+			} else {
+				modelList[name] = modelObj;
+				if(--loadedAssets === 0) {
+					//when all assets have been loaded start the game
+					try {
+						main();
+					} catch (e) {
+						console.error("Fatal error ", e);
+						alert("Error in game!");
+					}
 				}
-			});
-		}
-
-	});
+			}
+		});
+	}
 }
 
 // Initialize WebGL or experimental WebGL
@@ -88,11 +81,11 @@ function drawScene(objCamera, buffers)
 	gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
 	gl.clearColor(0.53, 0.81, 0.8, 0.98);
 	gl.clear(gl.DEPTH_BUFFER_BIT | gl.COLOR_BUFFER_BIT);
-		
+
 	glMatrix.mat4.perspective(projectionMatrix, 45 * (Math.PI / 180), gl.viewportWidth / gl.viewportHeight, 0.1, 1000.0);
-	
+
 	useLighting();
-	
+
 	glMatrix.mat4.identity(modelViewMatrix);
 
 	glMatrix.mat4.rotate(modelViewMatrix, modelViewMatrix, degToRad(-objCamera.pitch), [1, 0, 0]);
@@ -103,14 +96,14 @@ function drawScene(objCamera, buffers)
 	//////////////////////////
 	// Box crates
 	///
-	
+
 	drawBox(buffers, 0, 0.1, 0, 50);
 
 	drawBox(buffers, 0, 2.1, 0, 37);
 
 	drawBox(buffers, 3, 0.1, -2, 0);
 
-	
+
 	/////////////////////////
 	// Hangar model
 
@@ -124,8 +117,46 @@ function drawScene(objCamera, buffers)
 	////////////////////////////////////////
 
 	drawGun(buffers, objCamera);
-	
+
 }
+
+
+/*************************/
+/********* EVENTS ********/
+/*************************/
+function mouseDown(event) {
+	console.log("mouse down");
+	// if canvas is not locking mouse pointer we lock it otherwise we trigger mouse down action
+	// noinspection JSUnresolvedVariable
+	if(document.pointerLockElement === canvas) {
+		alert("shoot");
+	} else {
+		// lock mouse pointer on canvas
+		// noinspection JSUnresolvedFunction
+		canvas.requestPointerLock();
+	}
+}
+
+function mouseMove(event) {
+	objCamera.handleMouseMove(event);
+}
+
+function pointerLockChange(event) {
+	// noinspection JSUnresolvedVariable
+	if(document.pointerLockElement === canvas) {
+		console.log("lock pointer change to locked");
+		window.__mouseMoveEvent = mouseMove.bind(this); //we need to store bound mouse event so we can remove it later
+		canvas.addEventListener('mousemove', window.__mouseMoveEvent, false);
+	} else {
+		console.log("lock pointer change to released");
+		canvas.removeEventListener('mousemove', window.__mouseMoveEvent, false);
+	}
+}
+
+
+/*************************/
+/********** MAIN *********/
+/*************************/
 
 // Main function where the functions are called.
 function main()
@@ -147,10 +178,14 @@ function main()
 
 	initTextures();
 
-	var objCamera = new camera();
+	// var objCamera = new camera();
+	objCamera = new camera();
 
 	document.onkeydown = function (event) { objCamera.handleKeyDown(event) };
 	document.onkeyup = function (event) { objCamera.handleKeyUp(event) };
+	canvas.onmousedown = mouseDown.bind(this);
+	document.addEventListener('pointerlockchange', pointerLockChange.bind(this), false);
+
 
 	setInterval(function()
 	{
@@ -162,5 +197,4 @@ function main()
 		}
 
 	}, 15);
-
 }
