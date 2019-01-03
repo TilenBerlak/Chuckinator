@@ -19,6 +19,9 @@ var modelList = {};
 // Camera
 var objCamera = null; //initialized in main
 
+// Game Objects
+var gameObjects = [];
+
 // Game configuration
 var gameConfiguration = {
 	mouseSpeed: 100, // between 50 and 150
@@ -116,8 +119,11 @@ function drawScene(objCamera, buffers)
 
 	////////////////////////////////////////
 
-	drawGun(buffers, objCamera);
+	// drawGun(buffers, objCamera);
 
+    for(let i=0; i<this.gameObjects.length; i++) {
+        this.gameObjects[i].draw();
+    }
 }
 
 
@@ -180,6 +186,11 @@ function main()
 
 	// var objCamera = new camera();
 	objCamera = new camera();
+	this.gameObjects.push(new gunAssetObject([-4, 2, 0], [0.25, 0.25, 0.25], [90, 60, -90]));
+	this.gameObjects.push(new gunAssetObject([-4, 4, 0], [0.25, 0.25, 0.25], [90, 45, -70]));
+	this.gameObjects.push(new gunAssetObject([-4, 6, 0], [0.25, 0.25, 0.25], [60, 60, -90]));
+	this.gameObjects.push(new gunAssetObject([-4, 6, 0], [0.25, 0.25, 0.25], [60, 60, -90]));
+	this.gameObjects[3].moveZ(2);
 
 	document.onkeydown = function (event) { objCamera.handleKeyDown(event) };
 	document.onkeyup = function (event) { objCamera.handleKeyUp(event) };
