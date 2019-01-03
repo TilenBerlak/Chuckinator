@@ -130,6 +130,28 @@ function initilizeBuffers()
 	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(hangarfloorIndecies), gl.STATIC_DRAW);
 
 
+	///
+	//
+	///
+
+	///
+	// Handgun buffers
+	///
+	// var handgunVertices = modelList["handgun"].meshes[0].vertices;
+	// var handgunIndecies = [].concat.apply([], modelList["handgun"].meshes[0].faces);
+	// var handgunTexCoords = modelList["handgun"].meshes[0].texturecoords[0];
+	//
+	// var handgunVertexBuffer = gl.createBuffer();
+	// gl.bindBuffer(gl.ARRAY_BUFFER, handgunVertexBuffer);
+	// gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(handgunVertices), gl.STATIC_DRAW);
+	//
+	// var handgunTexCoordsVertexBuffer = gl.createBuffer();
+	// gl.bindBuffer(gl.ARRAY_BUFFER, handgunTexCoordsVertexBuffer);
+	// gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(handgunTexCoords), gl.STATIC_DRAW);
+	//
+	// var handgunIndexBuffer = gl.createBuffer();
+	// gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, handgunIndexBuffer);
+	// gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(handgunIndecies), gl.STATIC_DRAW);
 
 
 	return {
@@ -146,6 +168,11 @@ function initilizeBuffers()
 		hangarfloorTexCoordsVertexBuffer: hangarfloorTexCoordsVertexBuffer,
 		hangarfloorIndexBuffer:			hangarfloorIndexBuffer,
 		hangarfloorIndeciesLength:		hangarfloorIndecies.length,
+
+		// handgunVertexBuffer:	handgunVertexBuffer,
+		// handgunTexCoordsVertexBuffer: handgunTexCoordsVertexBuffer,
+		// handgunIndexBuffer:			handgunIndexBuffer,
+		// handgunIndeciesLength:		handgunIndecies.length,
     }
 
 }
