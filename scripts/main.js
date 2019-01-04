@@ -45,6 +45,9 @@ function initializeResources() {
         {name: "floor", file: "hangarfloor.json"},
         {name: "gun", file: "gun.json"},
         {name: "box", file: "box.json"},
+        {name: "alien", file: "alien.json"},
+        {name: "watertank", file: "watertank.json"},
+        {name: "warpgate", file: "warpgate.json"},
     ];
 
     const textures = [
@@ -52,6 +55,8 @@ function initializeResources() {
         {name: "concrete", file: "concrete.png"},
         {name: "metal", file: "metal.png"},
         {name: "gun", file: "guntexture.png"},
+        {name: "alien", file: "alientexture.png"},
+        {name: "warpgate", file: "warpgatetexture.png"},
     ];
 
     let loaded = assets.length + textures.length;
@@ -183,17 +188,35 @@ function main() {
 
     initializeShaders();
 
-    objCamera = new Camera([0, 1, -7]);
+    objCamera = new Camera([110, 1, 28]);
     let gun = new GunAssetObject(objCamera,[-0.1, -0.8, 3], [0.25, 0.25, 0.25], [0, -98, -90]);
 
     this.staticGameObjects.push(new HangarAssetObject([0, 31, 200], [1, 1, 1], [-90, 0, 0]));
     this.staticGameObjects.push(new FloorAssetObject([0, -1, 60], [140, 0.1, 150]));
 
     this.gameObjects.push(gun);
-    this.gameObjects.push(new BoxAssetObject([0, 0.1, 15], [1, 1, 1], [0, 50, 0]));
-    this.gameObjects.push(new BoxAssetObject([0, 2.1, 15], [1, 1, 1], [0, 37, 0]));
-    this.gameObjects.push(new BoxAssetObject([3, 0.1, 16], [1, 1, 1], [0, 0, 0]));
-    this.gameObjects.push(new BoxAssetObject([0, 0, 10], [1, 1, 1], [0, 0, 0]));
+
+    // Medium boxes
+    this.gameObjects.push(new BoxAssetObject([102, 0.6, 25], [1.5, 1.5, 1.5], [0, 0, 0]));
+
+    // Small boxes
+    this.gameObjects.push(new BoxAssetObject([110, 2.1, 4], [1, 1, 1], [0, 37, 0]));
+    this.gameObjects.push(new BoxAssetObject([110, 0.1, 4], [1, 1, 1], [0, 0, 0]));
+    
+    // Big boxes
+    this.gameObjects.push(new BoxAssetObject([96, 3.1, 27], [4, 4, 4], [0, 0, 0]));
+    this.gameObjects.push(new BoxAssetObject([50, 3.1, -13], [4, 4, 4], [0, 0, 0]));
+    this.gameObjects.push(new BoxAssetObject([29, 3.1, 17], [4, 4, 4], [0, 0, 0]));
+    this.gameObjects.push(new BoxAssetObject([-107, 3.1, -16], [4, 4, 4], [0, 0, 0]));
+    this.gameObjects.push(new BoxAssetObject([115, 3.1, -12], [4, 4, 4], [0, 0, 0]));
+
+    // Aliens
+    this.gameObjects.push(new AlienAssetObject([15, 5, 26], [1, 1, 1], [-90, 0, 90]));
+    
+    // Other
+    this.gameObjects.push(new WatertankAssetObject([-116, -1, -19], [1, 1, 1], [-90, 0, 90]));
+    this.gameObjects.push(new WarpgateAssetObject([-26, 23, 185], [20, 20, 20], [0, 140, 0]));
+
 
     document.onkeydown = function (event) {
         objCamera.handleKeyDown(event)
