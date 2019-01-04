@@ -1,5 +1,5 @@
 class AssetObject {
-    constructor(model, texture, position = [0, 0, 0], scale = [1, 1, 1], rotate = [0, 0, 0]) {
+    constructor(model, texture, position = [0, 0, 0], scale = [1, 1, 1], rotate = [0, 0, 0], collisionBox = [0, 0, 0] ){
         this.vertexBuffer = null;
         this.normalsBuffer = null;
         this.textureCoordinatesBuffer = null;
@@ -10,6 +10,9 @@ class AssetObject {
         this.position = position;
         this.scale = scale;
         this.rotate = rotate;
+
+        this.collisionBox = collisionBox;
+
     }
 
     moveX(x) {
@@ -44,6 +47,20 @@ class AssetObject {
         glMatrix.mat4.scale(modelViewMatrix, modelViewMatrix, this.scale);
     }
 
+    checkCollision(point)
+    {
+        if(this.collisionBox[0] > 0)
+        {
+            console.log(this.position[0]+this.collisionBox[0]+0.5);
+            if( ( point[0] >= this.position[0]-this.collisionBox[0]-0.5 && point[0] <= this.position[0]+this.collisionBox[0]+0.5 ) &&
+               ( point[1] >= this.position[1]-this.collisionBox[1]-2 && point[1] <= this.position[1]+this.collisionBox[1]+2 ) &&
+               ( point[2] >= this.position[2]-this.collisionBox[2]-0.5 && point[2] <= this.position[2]+this.collisionBox[2]+0.5 ) )
+            {
+                return true;
+            }
+        }
+    }
+    
     draw(glMatrix, modelViewMatrix) {
         modelViewPushMatrix();
         this._tranformate(glMatrix, modelViewMatrix);

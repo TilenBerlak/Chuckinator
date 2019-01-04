@@ -127,12 +127,22 @@ function drawScene(objCamera) {
 
     objCamera.moveToCamera(glMatrix, modelViewMatrix);
 
-    for (let i = 0; i < this.gameObjects.length; i++) {
+    for (let i = 0; i < this.gameObjects.length; i++) 
+    {
+        if(this.gameObjects[i].checkCollision(objCamera.position))
+        {
+            objCamera.xPosition = objCamera.prevPosition[0];
+            objCamera.yPosition = objCamera.prevPosition[1];
+            objCamera.zPosition = objCamera.prevPosition[2];
+        }
         this.gameObjects[i].draw(glMatrix, modelViewMatrix);
     }
-    for (let i = 0; i < this.staticGameObjects.length; i++) {
+    for (let i = 0; i < this.staticGameObjects.length; i++) 
+    {
         this.staticGameObjects[i].draw(glMatrix, modelViewMatrix);
     }
+
+
 }
 
 
