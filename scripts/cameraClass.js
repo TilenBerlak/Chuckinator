@@ -5,7 +5,7 @@ class Camera {
     constructor(position = [0, 0, 0]) {
         this.pitch = 0;
         this.pitchRate = 0;
-        this.yaw = 180;
+        this.yaw = 60;
         this.yawRate = 0;
         this.joggingAngle = 0;
         this.xPosition = position[0];
@@ -45,8 +45,8 @@ class Camera {
 
             this.yaw += this.yawRate * elapsed;
             this.pitch += this.pitchRate * elapsed;
-
-            console.log("Y: " + this.yaw + " P: " + this.pitch);
+            console.log("x: " + this.xPosition + " y: " + this.yPosition + " z: " + this.zPosition);
+            //console.log("Y: " + this.yaw + " P: " + this.pitch);
             //reset yaw and pitch rate so it stops when mouse is not moving
             this.yawRate = 0;
             this.pitchRate = 0;
@@ -150,7 +150,7 @@ class Camera {
     }
 
     handleKeyDown(event) {
-        console.log(event.keyCode);
+        //console.log(event.keyCode);
         this.currentlyPressedKeys[event.keyCode] = true;
     }
 

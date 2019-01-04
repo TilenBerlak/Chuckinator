@@ -13,9 +13,9 @@ function useLighting()
 
         gl.uniform3f(
             SHADER_PROGRAM.uPointLightingPositionLocation,
-            0,
-            0,
-            0,
+            20,
+            5,
+            15,
         );
 
         gl.uniform3f(
