@@ -21,6 +21,7 @@ var objCamera = null; //initialized in main
 // Game Objects
 var staticGameObjects = [];
 var gameObjects = [];
+var bulletObjects = [];
 
 // Game configuration
 var gameConfiguration = {
@@ -28,7 +29,19 @@ var gameConfiguration = {
     gravity: 0.005, // gravity for jumping
     jumpFactor: 0.2, // jump factor (press half factor is used, long press up to this factor is used)
     runSpeed: 0.012, //character speed
+    bulletSpeed: 0.09,
+    worldBox: {
+        minX: -150,
+        minY: -2,
+        minZ: -100,
+        maxX: 140,
+        maxY: 50,
+        maxZ: 220,
+    }
 };
+
+// Game variables
+var mousePressTime = 0;
 ///
 //
 ///
@@ -48,6 +61,7 @@ function initializeResources() {
         {name: "alien", file: "alien.json"},
         {name: "watertank", file: "watertank.json"},
         {name: "warpgate", file: "warpgate.json"},
+        {name: "bullet", file: "bullet.json"},
     ];
 
     const textures = [
@@ -57,6 +71,7 @@ function initializeResources() {
         {name: "gun", file: "guntexture.png"},
         {name: "alien", file: "alientexture.png"},
         {name: "warpgate", file: "warpgatetexture.png"},
+        {name: "bullet", file: "guntexture.png"},
     ];
 
     let loaded = assets.length + textures.length;
@@ -133,6 +148,10 @@ function drawScene(objCamera) {
     for (let i = 0; i < this.staticGameObjects.length; i++) {
         this.staticGameObjects[i].draw(glMatrix, modelViewMatrix);
     }
+    for (let i = 0; i < this.bulletObjects.length; i++) {
+        this.bulletObjects[i].draw(glMatrix, modelViewMatrix);
+    }
+
 }
 
 
@@ -145,11 +164,32 @@ function mouseDown(event) {
     // if canvas is not locking mouse pointer we lock it otherwise we trigger mouse down action
     // noinspection JSUnresolvedVariable
     if (document.pointerLockElement === canvas) {
-        alert("shoot");
+        mousePressTime = new Date().getTime();
     } else {
         // lock mouse pointer on canvas
         // noinspection JSUnresolvedFunction
         canvas.requestPointerLock();
+    }
+}
+function mouseUp(event) {
+    // noinspection JSUnresolvedVariable
+    if (document.pointerLockElement === canvas) {
+        mousePressTime = 0;
+        const cameraPosition = objCamera.position;
+
+        let x = cameraPosition[0];
+        let y = cameraPosition[1];
+        let z = cameraPosition[2];
+        let factor = 0.5;
+
+        x -= Math.sin(degToRad(objCamera.yaw - 90)) * factor;
+        z -= Math.cos(degToRad(objCamera.yaw - 90)) * factor;
+        y -= factor;
+
+        let damage = Math.max(parseFloat(document.documentElement.style.getPropertyValue('--bullet-size')), 0.1);
+
+        bulletObjects.push(new BulletAssetObject([x, y, z], objCamera.yaw-10, objCamera.pitch, damage));
+        document.documentElement.style.setProperty('--bullet-size', '0');
     }
 }
 
@@ -169,6 +209,31 @@ function pointerLockChange(event) {
     }
 }
 
+function onAssetDeath(event) {
+    console.error("ASSET DEATH");
+    let asset = event.detail;
+    let i, length = gameObjects.length;
+    for(i = length - 1; i >= 0; i--) {
+        if(gameObjects[i] === asset) {
+            gameObjects.splice(i, 1);
+            break;
+        }
+    }
+}
+
+function onBulletCollision(source, target) {
+    console.warn("shot collided");
+    if(source instanceof BulletAssetObject && target instanceof LiveAssetObject) {
+        let i, length = bulletObjects.length;
+        for(i = length - 1; i >= 0; i--) {
+            if(bulletObjects[i] === source) {
+                bulletObjects.splice(i, 1);
+                break;
+            }
+        }
+        target.hit(source.getDamage());
+    }
+}
 
 /*************************/
 /********** MAIN *********/
@@ -189,7 +254,7 @@ function main() {
     initializeShaders();
 
     objCamera = new Camera([110, 1, 28]);
-    let gun = new GunAssetObject(objCamera,[-0.1, -0.8, 3], [0.25, 0.25, 0.25], [0, -98, -90]);
+    let gun = new GunAssetObject(objCamera, [-0.1, -0.8, 3], [0.25, 0.25, 0.25], [0, -98, -90]);
 
     this.staticGameObjects.push(new HangarAssetObject([0, 31, 200], [1, 1, 1], [-90, 0, 0]));
     this.staticGameObjects.push(new FloorAssetObject([0, -1, 60], [140, 0.1, 150]));
@@ -225,6 +290,8 @@ function main() {
         objCamera.handleKeyUp(event)
     };
     canvas.onmousedown = mouseDown.bind(this);
+    canvas.onmouseup = mouseUp.bind(this);
+    canvas.addEventListener('death-event', onAssetDeath.bind(this), false);
     document.addEventListener('pointerlockchange', pointerLockChange.bind(this), false);
 
 
@@ -237,13 +304,36 @@ function main() {
 
                 objCamera.animate();
 
-                for(let i=0; i<gameObjects.length; i++) {
-                    if(objCamera.checkCollision(gameObjects[i])) {
+                let i, j;
+
+                let length = bulletObjects.length;
+                for (i = length - 1; i >= 0; i--) {
+                    bulletObjects[i].animate();
+                    if(bulletObjects[i].checkWorldCollision()) {
+                        bulletObjects.splice(i, 1);
+                    }
+                }
+
+                for (i = 0; i < gameObjects.length; i++) {
+                    if (objCamera.checkCollision(gameObjects[i])) {
                         objCamera.position[0] = x;
                         objCamera.position[1] = y;
                         objCamera.position[2] = z;
                         console.log("collision detected " + i);
                     }
+                    for (j = 0; j < bulletObjects.length; j++) {
+                        if (bulletObjects[j].checkCollision(gameObjects[i])) {
+                            onBulletCollision(bulletObjects[j], gameObjects[i]);
+                        }
+                    }
+                }
+
+                if(mousePressTime !== 0) {
+                    const duration = new Date().getTime() - mousePressTime;
+                    let damage = Math.min(Math.max(duration - 500, 0), 3000); //between 1000 and 5000
+                    damage = damage / 3000;
+
+                    document.documentElement.style.setProperty('--bullet-size', damage + '');
                 }
             });
 

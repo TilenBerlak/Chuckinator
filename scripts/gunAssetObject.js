@@ -2,7 +2,6 @@ class GunAssetObject extends AssetObject{
     constructor(camera, position = [0, 0, 0], scale = [1, 1, 1], rotate = [0, 0, 0]) {
         super(modelList["gun"], textureList["gun"], position, scale, rotate);
         this.camera = camera;
-        this.offset = 2;
     }
 
     _tranformate(glMatrix, modelViewMatrix) {

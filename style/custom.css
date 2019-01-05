@@ -1,0 +1,19 @@
+:root {
+    --bullet-size: 0;
+}
+
+#bullet-size-container {
+    height: 50px;
+    width: 50px;
+    background: white;
+    border: 1px solid red;
+    border-radius: 25px;
+}
+
+#bullet-size {
+    height: 50px;
+    width: 50px;
+    background: red;
+    border-radius: 25px;
+    transform: scale(var(--bullet-size), var(--bullet-size));
+}

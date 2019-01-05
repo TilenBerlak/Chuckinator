@@ -13,6 +13,10 @@ class Collision {
     static _checkPointToCircleCollision(x, z, centerPosition, radius) {
         return Math.sqrt(Math.pow(x - centerPosition[0], 2) + Math.pow(z - centerPosition[2], 2)) < radius;
     }
+
+    static checkPointToWorldCollision(position, xMin, yMin, zMin, xMax, yMax, zMax) {
+        return position[0] < xMin || position[0] > xMax || position[1] < yMin || position[1] > yMax || position[2] < zMin || position[2] > zMax;
+    }
 }
 
 class SATCollision extends Collision {
@@ -54,7 +58,6 @@ class AlignedBoxCollision extends Collision {
             }
             return false;
         } else {
-            alert("unsupported collision object!" + collision);
             throw("unsupported collison object!");
         }
     }
