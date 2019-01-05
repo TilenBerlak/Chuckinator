@@ -49,9 +49,13 @@ class AssetObject {
 
     checkCollision(point)
     {
+        if(point[0] > 124 || point[0] < -123 || point[2] < -21 || point[2] > 191)
+        {
+            return true;
+        }
+
         if(this.collisionBox[0] > 0)
         {
-            console.log(this.position[0]+this.collisionBox[0]+0.5);
             if( ( point[0] >= this.position[0]-this.collisionBox[0]-0.5 && point[0] <= this.position[0]+this.collisionBox[0]+0.5 ) &&
                ( point[1] >= this.position[1]-this.collisionBox[1]-2 && point[1] <= this.position[1]+this.collisionBox[1]+2 ) &&
                ( point[2] >= this.position[2]-this.collisionBox[2]-0.5 && point[2] <= this.position[2]+this.collisionBox[2]+0.5 ) )

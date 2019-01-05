@@ -38,8 +38,10 @@ class Camera {
             }
             if (this.speed !== 0) {
                 this.prevPosition = [this.xPosition, this.yPosition, this.zPosition];
+
                 this.xPosition -= Math.sin(degToRad(this.yaw + this.direction)) * this.speed * elapsed;
                 this.zPosition -= Math.cos(degToRad(this.yaw + this.direction)) * this.speed * elapsed;
+
                 if (this.onGround) {
                     this.joggingAngle += elapsed * 0.6; // 0.6 "fiddle factor" - makes it feel more realistic :-)
                     this.yPosition = 1 + Math.sin(degToRad(this.joggingAngle)) / 20 + 0.4
@@ -49,7 +51,7 @@ class Camera {
             this.yaw += this.yawRate * elapsed;
             this.pitch += this.pitchRate * elapsed;
             this.position = [this.xPosition, this.yPosition, this.zPosition];
-            //console.log("x: " + this.xPosition + " y: " + this.yPosition + " z: " + this.zPosition);
+            console.log("x: " + this.xPosition + " y: " + this.yPosition + " z: " + this.zPosition);
             //console.log("Y: " + this.yaw + " P: " + this.pitch);
             //reset yaw and pitch rate so it stops when mouse is not moving
             this.yawRate = 0;
