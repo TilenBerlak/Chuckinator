@@ -159,6 +159,14 @@ function drawScene(objCamera) {
 /********* EVENTS ********/
 
 /*************************/
+function onResize() {
+    //fix canvas width and height to fit document body
+    this.canvas.width = document.body.clientWidth; //document.width is obsolete
+    this.canvas.height = document.body.clientHeight; //document.height is obsolete
+    gl.viewportWidth = canvas.width;
+    gl.viewportHeight = canvas.height;
+}
+
 function mouseDown(event) {
     console.log("mouse down");
     // if canvas is not locking mouse pointer we lock it otherwise we trigger mouse down action
@@ -185,6 +193,15 @@ function mouseUp(event) {
         x -= Math.sin(degToRad(objCamera.yaw - 90)) * factor;
         z -= Math.cos(degToRad(objCamera.yaw - 90)) * factor;
         y -= factor;
+        //
+        // //forward
+        // x -= Math.sin(degToRad(objCamera.yaw)) * 6;
+        // z -= Math.cos(degToRad(objCamera.yaw)) * 6;
+        // //right
+        // x -= Math.sin(degToRad(objCamera.yaw - 90)) * 1.7;
+        // z -= Math.cos(degToRad(objCamera.yaw - 90)) * 1.7;
+        // //down
+        // y -= 0.5;
 
         let damage = Math.max(parseFloat(document.documentElement.style.getPropertyValue('--bullet-size')), 0.1);
 
@@ -235,12 +252,18 @@ function onBulletCollision(source, target) {
     }
 }
 
+function onAssetPick(asset) {
+    console.error("asset picked");
+    LiveAssetObject.triggerDeathEvent(asset);
+}
+
 /*************************/
 /********** MAIN *********/
 /*************************/
 
 // Main function where the functions are called.
 function main() {
+    onResize();
 
     if (gl) {
         gl.clearColor(0.75, 0.85, 0.8, 1.0);
@@ -253,6 +276,7 @@ function main() {
 
     initializeShaders();
 
+    // objCamera = new Camera([-117, 1, -8], 0);
     objCamera = new Camera([110, 1, 28]);
     let gun = new GunAssetObject(objCamera, [-0.1, -0.8, 3], [0.25, 0.25, 0.25], [0, -98, -90]);
 
@@ -320,6 +344,9 @@ function main() {
                         objCamera.position[1] = y;
                         objCamera.position[2] = z;
                         console.log("collision detected " + i);
+                        if(gameObjects[i] instanceof PickAssetObject) {
+                            onAssetPick(gameObjects[i]);
+                        }
                     }
                     for (j = 0; j < bulletObjects.length; j++) {
                         if (bulletObjects[j].checkCollision(gameObjects[i])) {

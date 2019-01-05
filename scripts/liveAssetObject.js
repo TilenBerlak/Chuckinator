@@ -7,8 +7,12 @@ class LiveAssetObject extends AssetObject {
     hit(value) {
         this.life -= value;
         if(this.life <= 0) {
-            let event = new CustomEvent("death-event", {detail: this});
-            canvas.dispatchEvent(event);
+            LiveAssetObject.triggerDeathEvent(this);
         }
+    }
+
+    static triggerDeathEvent(asset) {
+        let event = new CustomEvent("death-event", {detail: asset});
+        canvas.dispatchEvent(event);
     }
 }

@@ -1,45 +1,53 @@
 <html>
-    <head>
-        <title>Chuckinator</title>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8;">
+<head>
+    <title>Chuckinator</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8;">
 
-        <link rel="stylesheet" href="./style/custom.css" type="text/css">
-    </head>
-    <body onload="initializeResources()">
-        <canvas id="glcanvas" width="1280px" height="720px" style="border:1px solid #000000;">
+    <link rel="stylesheet" href="./style/custom.css" type="text/css">
+</head>
+<body onload="initializeResources()" onresize="onResize()">
+<div id="main">
+    <div id="loading">
+        <h1>INITIALIZING WEB-GL...</h1>
+    </div>
+    <div id="game">
+        <canvas id="glcanvas" width="1280px" height="720px">
             No <code>&lt;canvas&gt;</code> suppport in your browser.
         </canvas>
+    </div>
 
-        <div id="hud">
-            <div id="bullet-size-container">
-                <div id="bullet-size"></div>
-            </div>
+    <div id="hud">
+        <div id="bullet-size-container">
+            <div id="bullet-size"></div>
         </div>
+    </div>
+</div>
 
-        <!-- Include new scripts here -->       
-        <script src="./scripts/main.js" type="text/javascript"></script>
+<!-- Include new scripts here -->
+<script src="./scripts/main.js" type="text/javascript"></script>
 
-        <script src="./scripts/shaders.js" type="text/javascript"></script>
-        <!--<script src="./scripts/buffers.js" type="text/javascript"></script>-->
-        <script src="./scripts/util.js" type="text/javascript"></script>
-        <script src="./scripts/cameraClass.js" type="text/javascript"></script>
-        <!--<script src="./scripts/drawObjects.js" type="text/javascript"></script>-->
-        <script src="./scripts/lighting.js" type="text/javascript"></script>
+<script src="./scripts/shaders.js" type="text/javascript"></script>
+<!--<script src="./scripts/buffers.js" type="text/javascript"></script>-->
+<script src="./scripts/util.js" type="text/javascript"></script>
+<script src="./scripts/cameraClass.js" type="text/javascript"></script>
+<!--<script src="./scripts/drawObjects.js" type="text/javascript"></script>-->
+<script src="./scripts/lighting.js" type="text/javascript"></script>
 
-        <script src="./scripts/collision.js" type="text/javascript"></script>
-        <script src="./scripts/assetObject.js" type="text/javascript"></script>
-        <script src="./scripts/liveAssetObject.js" type="text/javascript"></script>
-        <script src="./scripts/hangarAssetObject.js" type="text/javascript"></script>
-        <script src="./scripts/floorAssetObject.js" type="text/javascript"></script>
-        <script src="./scripts/boxAssetObject.js" type="text/javascript"></script>
-        <script src="./scripts/gunAssetObject.js" type="text/javascript"></script>
-        <script src="./scripts/bulletAssetObject.js" type="text/javascript"></script>
-        <script src="./scripts/alienAssetObject.js" type="text/javascript"></script>
-        <script src="./scripts/watertankAssetObject.js" type="text/javascript"></script>
-        <script src="./scripts/warpgateAssetObject.js" type="text/javascript"></script>
+<script src="./scripts/collision.js" type="text/javascript"></script>
+<script src="./scripts/assetObject.js" type="text/javascript"></script>
+<script src="./scripts/pickAssetObject.js" type="text/javascript"></script>
+<script src="./scripts/liveAssetObject.js" type="text/javascript"></script>
+<script src="./scripts/hangarAssetObject.js" type="text/javascript"></script>
+<script src="./scripts/floorAssetObject.js" type="text/javascript"></script>
+<script src="./scripts/boxAssetObject.js" type="text/javascript"></script>
+<script src="./scripts/gunAssetObject.js" type="text/javascript"></script>
+<script src="./scripts/bulletAssetObject.js" type="text/javascript"></script>
+<script src="./scripts/alienAssetObject.js" type="text/javascript"></script>
+<script src="./scripts/watertankAssetObject.js" type="text/javascript"></script>
+<script src="./scripts/warpgateAssetObject.js" type="text/javascript"></script>
 
-        <!-- Include new libraries here -->
-        <script src="./libs/gl-matrix.js" type="text/javascript"></script>
+<!-- Include new libraries here -->
+<script src="./libs/gl-matrix.js" type="text/javascript"></script>
 
-    </body>
+</body>
 </html>

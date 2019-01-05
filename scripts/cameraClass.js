@@ -2,10 +2,10 @@
 // Camera class to handle movement around the scene.
 
 class Camera {
-    constructor(position = [0, 0, 0]) {
+    constructor(position = [0, 0, 0], yaw = 90) {
         this.pitch = 0;
         this.pitchRate = 0;
-        this.yaw = 90;
+        this.yaw = yaw;
         this.yawRate = 0;
         this.joggingAngle = 0;
         this.position = position;
@@ -43,7 +43,7 @@ class Camera {
 
             this.yaw += this.yawRate * elapsed;
             this.pitch += this.pitchRate * elapsed;
-            // console.log("x: " + this.position[0] + " y: " + this.position[1] + " z: " + this.position[2] + "YAW: " + this.yaw + " PITCH: " + this.pitch);
+            console.log("x: " + this.position[0] + " y: " + this.position[1] + " z: " + this.position[2] + "YAW: " + this.yaw + " PITCH: " + this.pitch);
             //reset yaw and pitch rate so it stops when mouse is not moving
             this.yawRate = 0;
             this.pitchRate = 0;
