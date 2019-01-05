@@ -83,7 +83,7 @@ class CylinderCollision extends Collision {
         } else if (collision instanceof CylinderCollision) {
             return CylinderCollision._checkCircleToCircleCollision(asset.position, this.radius, collisionAsset.position, collision.radius)
         } else {
-            alert("unsupported collision object!" + collision);
+            console.error("unsupported collision object!" + collision);
         }
     }
 
