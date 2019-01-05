@@ -53,7 +53,13 @@ class Camera {
 
     checkCollision(asset) {
         if (asset.collision) {
-            return this.collision.checkCollision(this, asset.collision, asset);
+            let collision = this.collision.checkCollision(this, asset.collision, asset);
+            if (!collision) {
+                if (this.position[0] > 124 || this.position[0] < -123 || this.position[2] < -21 || this.position[2] > 191) {
+                    return true;
+                }
+            }
+            return collision;
         } else {
             console.warn("Checking collision on asset without collision object!");
         }
@@ -74,11 +80,11 @@ class Camera {
         this.speed = 0;
         this.direction = 0;
 
-        if(this.currentlyPressedKeys[79]) {
+        if (this.currentlyPressedKeys[79]) {
             gameObjects[0].position[2]++;
             this.currentlyPressedKeys[79] = false;
         }
-        if(this.currentlyPressedKeys[80]) {
+        if (this.currentlyPressedKeys[80]) {
             gameObjects[0].position[2]--;
             this.currentlyPressedKeys[80] = false;
         }

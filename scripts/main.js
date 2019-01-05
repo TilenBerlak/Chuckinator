@@ -30,7 +30,7 @@ var gameConfiguration = {
     mouseSpeed: 100, // between 50 and 150
     gravity: 0.005, // gravity for jumping
     jumpFactor: 0.2, // jump factor (press half factor is used, long press up to this factor is used)
-    runSpeed: 0.1012, //character speed
+    runSpeed: 0.012, //character speed
     bulletSpeed: 0.09,
     worldBox: {
         minX: -150,
@@ -278,11 +278,7 @@ function onPortalEnter(asset) {
             setMessage("You need to kill al of the friendly aliens!");
         }
     } else {
-        setMessage("You need to find the key!");
-
-        // TODO REMOVE
-        // setMessage("Done");
-        // document.documentElement.style.setProperty('--end-slide', '0');
+        setMessage("You need to find the fuel!");
     }
 }
 
@@ -312,15 +308,14 @@ function main() {
 
     initializeShaders();
 
-    // objCamera = new Camera([-117, 1, -8], 0);
-    // objCamera = new Camera([110, 1, 28]);
-    objCamera = new Camera([-18, 1, 84], 180);
+    objCamera = new Camera([110, 1, 28]);
+
     let gun = new GunAssetObject(objCamera, [-0.1, -0.8, 3], [0.25, 0.25, 0.25], [0, -98, -90]);
 
+    this.staticGameObjects.push(gun);
     this.staticGameObjects.push(new HangarAssetObject([0, 31, 200], [1, 1, 1], [-90, 0, 0]));
     this.staticGameObjects.push(new FloorAssetObject([0, -1, 60], [140, 0.1, 150]));
 
-    this.staticGameObjects.push(gun);
 
     // Medium boxes
     this.gameObjects.push(new BoxAssetObject([102, 0.6, 25], [1.5, 1.5, 1.5], [0, 0, 0]));
