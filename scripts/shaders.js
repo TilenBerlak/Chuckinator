@@ -135,7 +135,6 @@ function initializeShaders()
     SHADER_PROGRAM.uPointLightingPositionLocation = gl.getUniformLocation(SHADER_PROGRAM, "uPointLightingPosition");
     SHADER_PROGRAM.uPointLightingColorLocation = gl.getUniformLocation(SHADER_PROGRAM, "uPointLightingColor");
 
-
     SHADER_PROGRAM.samplerUniform = gl.getUniformLocation(SHADER_PROGRAM, "uSampler");
 }
 

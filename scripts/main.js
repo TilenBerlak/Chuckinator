@@ -287,6 +287,8 @@ function main() {
 
     // Medium boxes
     this.gameObjects.push(new BoxAssetObject([102, 0.6, 25], [1.5, 1.5, 1.5], [0, 0, 0]));
+    this.gameObjects.push(new BoxAssetObject([12, 0.6, -16], [1.5, 1.5, 1.5], [0, 0, 0]));
+    this.gameObjects.push(new BoxAssetObject([6, 0.6, -16], [1.5, 1.5, 1.5], [0, 0, 0]));
 
     // Small boxes
     this.gameObjects.push(new BoxAssetObject([110, 2.1, 4], [1, 1, 1], [0, 37, 0]));
@@ -298,9 +300,40 @@ function main() {
     this.gameObjects.push(new BoxAssetObject([29, 3.1, 17], [4, 4, 4], [0, 0, 0]));
     this.gameObjects.push(new BoxAssetObject([-107, 3.1, -16], [4, 4, 4], [0, 0, 0]));
     this.gameObjects.push(new BoxAssetObject([115, 3.1, -12], [4, 4, 4], [0, 0, 0]));
+    this.gameObjects.push(new BoxAssetObject([-5, 3.1, 36], [4, 4, 4], [0, 0, 0]));
+
+    this.gameObjects.push(new BoxAssetObject([-76, 3.1, -12], [4, 4, 4], [0, 0, 0]));
+    this.gameObjects.push(new BoxAssetObject([-66, 3.1, -12], [4, 4, 4], [0, 0, 0]));
+    this.gameObjects.push(new BoxAssetObject([-56, 3.1, -12], [4, 4, 4], [0, 0, 0]));
+    this.gameObjects.push(new BoxAssetObject([-46, 3.1, -12], [4, 4, 4], [0, 0, 0]));
+    this.gameObjects.push(new BoxAssetObject([-38, 3.1, -12], [4, 4, 4], [0, 0, 0]));
+    this.gameObjects.push(new BoxAssetObject([-76, 11.2, -12], [4, 4, 4], [0, 30, 0]));
+    this.gameObjects.push(new BoxAssetObject([-56, 11.2, -12], [4, 4, 4], [0, 60, 0]));
+    this.gameObjects.push(new BoxAssetObject([-46, 11.2, -12], [4, 4, 4], [0, 15, 0]));
+    this.gameObjects.push(new BoxAssetObject([-70, 3.1, -3], [4, 4, 4], [0, 0, 0]));
+    this.gameObjects.push(new BoxAssetObject([-46, 3.1, -2], [4, 4, 4], [0, 0, 0]));
+
+    this.gameObjects.push(new BoxAssetObject([-50, 3.1, 67], [4, 4, 4], [0, 0, 0]));
+    this.gameObjects.push(new BoxAssetObject([-116, 3.1, 39], [4, 4, 4], [0, 0, 0]));
+    this.gameObjects.push(new BoxAssetObject([10, 3.1, 49], [4, 4, 4], [0, 0, 0]));
+    this.gameObjects.push(new BoxAssetObject([38, 3.1, 66], [4, 4, 4], [0, 0, 0]));
 
     // Aliens
     this.gameObjects.push(new AlienAssetObject([15, 5, 26], [1, 1, 1], [-90, 0, 90]));
+
+    this.gameObjects.push(new AlienAssetObject([-12, 5, 37], [1, 1, 1], [-90, 0, 180]));
+    this.gameObjects.push(new AlienAssetObject([-105, 5, 28], [1, 1, 1], [-90, 0, -90]));
+    this.gameObjects.push(new AlienAssetObject([47, 5, 58], [1, 1, 1], [-90, 0, -90]));
+    this.gameObjects.push(new AlienAssetObject([34, 5, 168], [1, 1, 1], [-90, 0, 120]));
+    this.gameObjects.push(new AlienAssetObject([-41, 5, 154], [1, 1, 1], [-90, 0, 120]));
+    this.gameObjects.push(new AlienAssetObject([-60, 5, 5], [1, 1, 1], [-90, 0, 45]));
+
+    // Walls
+    this.gameObjects.push(new WallAssetObject([90, 0, 37], [90, 53, 5], [0, 0, 0]));
+    this.gameObjects.push(new WallAssetObject([-40, 0, 77], [110, 53, 5], [0, 0, 0]));
+    this.gameObjects.push(new WallAssetObject([31, 0, -7], [14, 53, 20], [0, 0, 0]));
+    this.gameObjects.push(new WallAssetObject([109, 0, 141], [24, 53, 30], [0, 0, 0]));
+    this.gameObjects.push(new WallAssetObject([-92, 0, 9], [8, 53, 40], [0, 0, 0]));
 
     // Other
     this.gameObjects.push(new WatertankAssetObject([-116, -1, -19], [1, 1, 1], [-90, 0, 90]));
@@ -363,7 +396,6 @@ function main() {
                     document.documentElement.style.setProperty('--bullet-size', damage + '');
                 }
             });
-
 
             objCamera.handleKeys();
             drawScene(objCamera);
