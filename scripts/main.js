@@ -194,7 +194,7 @@ function main() {
     this.staticGameObjects.push(new HangarAssetObject([0, 31, 200], [1, 1, 1], [-90, 0, 0]));
     this.staticGameObjects.push(new FloorAssetObject([0, -1, 60], [140, 0.1, 150]));
 
-    this.gameObjects.push(gun);
+    this.staticGameObjects.push(gun);
 
     // Medium boxes
     this.gameObjects.push(new BoxAssetObject([102, 0.6, 25], [1.5, 1.5, 1.5], [0, 0, 0]));
@@ -202,7 +202,7 @@ function main() {
     // Small boxes
     this.gameObjects.push(new BoxAssetObject([110, 2.1, 4], [1, 1, 1], [0, 37, 0]));
     this.gameObjects.push(new BoxAssetObject([110, 0.1, 4], [1, 1, 1], [0, 0, 0]));
-    
+
     // Big boxes
     this.gameObjects.push(new BoxAssetObject([96, 3.1, 27], [4, 4, 4], [0, 0, 0]));
     this.gameObjects.push(new BoxAssetObject([50, 3.1, -13], [4, 4, 4], [0, 0, 0]));
@@ -212,7 +212,7 @@ function main() {
 
     // Aliens
     this.gameObjects.push(new AlienAssetObject([15, 5, 26], [1, 1, 1], [-90, 0, 90]));
-    
+
     // Other
     this.gameObjects.push(new WatertankAssetObject([-116, -1, -19], [1, 1, 1], [-90, 0, 90]));
     this.gameObjects.push(new WarpgateAssetObject([-26, 23, 185], [20, 20, 20], [0, 140, 0]));
@@ -231,8 +231,23 @@ function main() {
     setInterval(function () {
         if (true) {
             requestAnimationFrame(function () {
-                objCamera.animate()
+                let x = objCamera.position[0];
+                let y = objCamera.position[1];
+                let z = objCamera.position[2];
+
+                objCamera.animate();
+
+                for(let i=0; i<gameObjects.length; i++) {
+                    if(objCamera.checkCollision(gameObjects[i])) {
+                        objCamera.position[0] = x;
+                        objCamera.position[1] = y;
+                        objCamera.position[2] = z;
+                        console.log("collision detected " + i);
+                    }
+                }
             });
+
+
             objCamera.handleKeys();
             drawScene(objCamera);
         }

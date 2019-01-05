@@ -5,19 +5,17 @@ class Camera {
     constructor(position = [0, 0, 0]) {
         this.pitch = 0;
         this.pitchRate = 0;
-        this.yaw = 60;
+        this.yaw = 90;
         this.yawRate = 0;
         this.joggingAngle = 0;
-        this.xPosition = position[0];
-        this.yPosition = position[1];
-        this.zPosition = position[2];
+        this.position = position;
         this.speed = 0;
         this.direction = 0;
         this.lastTime = 0;
         this.yVelocity = 0;
         this.onGround = true;
         this.currentlyPressedKeys = {};
-        // this.gunAsset = gunAsset;
+        this.collision = new CylinderCollision(4, 2);
     }
 
     animate() {
@@ -27,44 +25,44 @@ class Camera {
 
             if (!this.onGround) {
                 this.yVelocity += gameConfiguration.gravity;
-                this.yPosition -= this.yVelocity;
-                if (this.yPosition < 1) {
-                    this.yPosition = 1;
+                this.position[1] -= this.yVelocity;
+                if (this.position[1] < 1) {
+                    this.position[1] = 1;
                     this.yVelocity = 0;
                     this.onGround = true;
                 }
             }
             if (this.speed !== 0) {
-                this.xPosition -= Math.sin(degToRad(this.yaw + this.direction)) * this.speed * elapsed;
-                this.zPosition -= Math.cos(degToRad(this.yaw + this.direction)) * this.speed * elapsed;
+                this.position[0] -= Math.sin(degToRad(this.yaw + this.direction)) * this.speed * elapsed;
+                this.position[2] -= Math.cos(degToRad(this.yaw + this.direction)) * this.speed * elapsed;
                 if (this.onGround) {
                     this.joggingAngle += elapsed * 0.6; // 0.6 "fiddle factor" - makes it feel more realistic :-)
-                    this.yPosition = 1 + Math.sin(degToRad(this.joggingAngle)) / 20 + 0.4
+                    this.position[1] = 1 + Math.sin(degToRad(this.joggingAngle)) / 20 + 0.4
                 }
             }
 
             this.yaw += this.yawRate * elapsed;
             this.pitch += this.pitchRate * elapsed;
-            console.log("x: " + this.xPosition + " y: " + this.yPosition + " z: " + this.zPosition);
-            //console.log("Y: " + this.yaw + " P: " + this.pitch);
+            console.log("x: " + this.position[0] + " y: " + this.position[1] + " z: " + this.position[2] + "YAW: " + this.yaw + " PITCH: " + this.pitch);
             //reset yaw and pitch rate so it stops when mouse is not moving
             this.yawRate = 0;
             this.pitchRate = 0;
-
-            // this.gunAsset.position = [this.xPosition - 0.1, this.yPosition - 0.8, this.zPosition + 3];
-            // this.gunAsset.rotate = [0, this.yaw - 90, this.pitch - 90];
-
-            // let gun = new GunAssetObject([-0.9, 0.2, -4], [0.25, 0.25, 0.25], [0, -98, -90]);
-            // objCamera = new Camera([0, 1, -7], gun);
         }
         this.lastTime = timeNow;
+    }
 
+    checkCollision(asset) {
+        if (asset.collision) {
+            return this.collision.checkCollision(this, asset.collision, asset);
+        } else {
+            console.warn("Checking collision on asset without collision object!");
+        }
     }
 
     moveToCamera(glMatrix, modelViewMatrix) {
         glMatrix.mat4.rotate(modelViewMatrix, modelViewMatrix, degToRad(-this.pitch), [1, 0, 0]);
         glMatrix.mat4.rotate(modelViewMatrix, modelViewMatrix, degToRad(-this.yaw), [0, 1, 0]);
-        glMatrix.mat4.translate(modelViewMatrix, modelViewMatrix, [-this.xPosition, -this.yPosition, -this.zPosition]);
+        glMatrix.mat4.translate(modelViewMatrix, modelViewMatrix, [-this.position[0], -this.position[1], -this.position[2]]);
     }
 
     handleMouseMove(event) {
@@ -77,11 +75,11 @@ class Camera {
         this.direction = 0;
 
         if(this.currentlyPressedKeys[79]) {
-            gameObjects[0].offset++;
+            gameObjects[0].position[2]++;
             this.currentlyPressedKeys[79] = false;
         }
         if(this.currentlyPressedKeys[80]) {
-            gameObjects[0].offset--;
+            gameObjects[0].position[2]--;
             this.currentlyPressedKeys[80] = false;
         }
 

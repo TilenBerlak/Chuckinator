@@ -7,7 +7,7 @@ class GunAssetObject extends AssetObject{
 
     _tranformate(glMatrix, modelViewMatrix) {
         //move gun to camera center
-        glMatrix.mat4.translate(modelViewMatrix, modelViewMatrix, [this.camera.xPosition, this.camera.yPosition, this.camera.zPosition ]);
+        glMatrix.mat4.translate(modelViewMatrix, modelViewMatrix, [this.camera.position[0], this.camera.position[1], this.camera.position[2]]);
         //rotate gun to straight position
         glMatrix.mat4.rotate(modelViewMatrix, modelViewMatrix, degToRad(-90), [0, 1, 0]);
         glMatrix.mat4.rotate(modelViewMatrix, modelViewMatrix, degToRad(-90), [0, 0, 1]);

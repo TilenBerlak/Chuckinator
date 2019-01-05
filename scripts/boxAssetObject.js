@@ -1,6 +1,6 @@
-class BoxAssetObject extends AssetObject{
+class BoxAssetObject extends AssetObject {
     constructor(position = [0, 0, 0], scale = [1, 1, 1], rotate = [0, 0, 0]) {
-        super(modelList["box"], textureList["crate"], position, scale, rotate);
+        super(modelList["box"], textureList["crate"], position, scale, rotate, new AlignedBoxCollision(scale[0] * 2, scale[1] * 2, scale[2] * 2));
     }
 
 }

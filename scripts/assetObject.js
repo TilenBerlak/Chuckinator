@@ -1,5 +1,5 @@
 class AssetObject {
-    constructor(model, texture, position = [0, 0, 0], scale = [1, 1, 1], rotate = [0, 0, 0]) {
+    constructor(model, texture, position, scale, rotate, collision) {
         this.vertexBuffer = null;
         this.normalsBuffer = null;
         this.textureCoordinatesBuffer = null;
@@ -7,6 +7,7 @@ class AssetObject {
         this.texture = texture;
         this._createBuffers(model);
 
+        this.collision = collision;
         this.position = position;
         this.scale = scale;
         this.rotate = rotate;
@@ -36,12 +37,12 @@ class AssetObject {
         this.rotate[2] = z;
     }
 
-    _tranformate(glMatrix, modelViewMatrix) {
-        glMatrix.mat4.translate(modelViewMatrix, modelViewMatrix, this.position);
-        glMatrix.mat4.rotate(modelViewMatrix, modelViewMatrix, degToRad(this.rotate[0]), [1, 0, 0]);
-        glMatrix.mat4.rotate(modelViewMatrix, modelViewMatrix, degToRad(this.rotate[1]), [0, 1, 0]);
-        glMatrix.mat4.rotate(modelViewMatrix, modelViewMatrix, degToRad(this.rotate[2]), [0, 0, 1]);
-        glMatrix.mat4.scale(modelViewMatrix, modelViewMatrix, this.scale);
+    checkCollision(asset) {
+        if (this.collision && asset.collision) {
+            return this.collision.checkCollision(this, asset.collision, asset);
+        } else {
+            console.warn("Checking collision on asset without collision object!");
+        }
     }
 
     draw(glMatrix, modelViewMatrix) {
@@ -88,6 +89,14 @@ class AssetObject {
         gl.drawElements(gl.TRIANGLES, this.indicesLength, gl.UNSIGNED_SHORT, 0);
 
         modelViewPopMatrix();
+    }
+
+    _tranformate(glMatrix, modelViewMatrix) {
+        glMatrix.mat4.translate(modelViewMatrix, modelViewMatrix, this.position);
+        glMatrix.mat4.rotate(modelViewMatrix, modelViewMatrix, degToRad(this.rotate[0]), [1, 0, 0]);
+        glMatrix.mat4.rotate(modelViewMatrix, modelViewMatrix, degToRad(this.rotate[1]), [0, 1, 0]);
+        glMatrix.mat4.rotate(modelViewMatrix, modelViewMatrix, degToRad(this.rotate[2]), [0, 0, 1]);
+        glMatrix.mat4.scale(modelViewMatrix, modelViewMatrix, this.scale);
     }
 
     _createBuffers(model) {
