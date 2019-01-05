@@ -23,14 +23,12 @@ class BulletAssetObject extends AssetObject {
 
         }
         this.lastTime = timeNow;
-
-        return true;
     }
 
     draw(glMatrix, modelViewMatrix) {
-        // if(new Date().getTime() - this.startTime > 100) {
+        if(new Date().getTime() - this.startTime > 100) {
             super.draw(glMatrix, modelViewMatrix);
-        // }
+        }
     }
 
     checkWorldCollision() {

@@ -2,6 +2,7 @@
 // Global variables
 ///
 var canvas = document.getElementById("glcanvas");
+var message = document.getElementById("message");
 var gl = initializeWebGL(canvas);
 var SHADER_PROGRAM;
 var lighting = true;
@@ -17,6 +18,7 @@ var textureList = {};
 
 // Camera
 var objCamera = null; //initialized in main
+var warpGate = null; //initialized in main
 
 // Game Objects
 var staticGameObjects = [];
@@ -28,7 +30,7 @@ var gameConfiguration = {
     mouseSpeed: 100, // between 50 and 150
     gravity: 0.005, // gravity for jumping
     jumpFactor: 0.2, // jump factor (press half factor is used, long press up to this factor is used)
-    runSpeed: 0.012, //character speed
+    runSpeed: 0.1012, //character speed
     bulletSpeed: 0.09,
     worldBox: {
         minX: -150,
@@ -42,6 +44,7 @@ var gameConfiguration = {
 
 // Game variables
 var mousePressTime = 0;
+var gameStop = false;
 ///
 //
 ///
@@ -255,11 +258,44 @@ function onBulletCollision(source, target) {
 function onAssetPick(asset) {
     console.error("asset picked");
     LiveAssetObject.triggerDeathEvent(asset);
+    document.documentElement.style.setProperty('--key-picked', 'block')
+}
+
+function onPortalEnter(asset) {
+    if(document.documentElement.style.getPropertyValue('--key-picked') === 'block') {
+        let finish = true;
+        for(let i=0; i<gameObjects.length; i++) {
+            if(gameObjects[i] instanceof AlienAssetObject) {
+                finish = false;
+                break;
+            }
+        }
+        if(finish) {
+            gameStop = true;
+            setMessage("Done");
+            document.documentElement.style.setProperty('--end-slide', '0');
+        } else {
+            setMessage("You need to kill al of the friendly aliens!");
+        }
+    } else {
+        setMessage("You need to find the key!");
+
+        // TODO REMOVE
+        // setMessage("Done");
+        // document.documentElement.style.setProperty('--end-slide', '0');
+    }
 }
 
 /*************************/
 /********** MAIN *********/
 /*************************/
+
+function setMessage(text) {
+    message.innerHTML = text;
+    setTimeout(function () {
+        message.innerHTML = "";
+    }, 5000);
+}
 
 // Main function where the functions are called.
 function main() {
@@ -277,7 +313,8 @@ function main() {
     initializeShaders();
 
     // objCamera = new Camera([-117, 1, -8], 0);
-    objCamera = new Camera([110, 1, 28]);
+    // objCamera = new Camera([110, 1, 28]);
+    objCamera = new Camera([-18, 1, 84], 180);
     let gun = new GunAssetObject(objCamera, [-0.1, -0.8, 3], [0.25, 0.25, 0.25], [0, -98, -90]);
 
     this.staticGameObjects.push(new HangarAssetObject([0, 31, 200], [1, 1, 1], [-90, 0, 0]));
@@ -336,8 +373,9 @@ function main() {
     this.gameObjects.push(new WallAssetObject([-92, 0, 9], [8, 53, 40], [0, 0, 0]));
 
     // Other
+    warpGate = new WarpgateAssetObject([-26, 23, 185], [20, 20, 20], [0, 180, 0]);
+    this.gameObjects.push(warpGate);
     this.gameObjects.push(new WatertankAssetObject([-116, -1, -19], [1, 1, 1], [-90, 0, 90]));
-    this.gameObjects.push(new WarpgateAssetObject([-26, 23, 185], [20, 20, 20], [0, 140, 0]));
 
 
     document.onkeydown = function (event) {
@@ -353,13 +391,14 @@ function main() {
 
 
     setInterval(function () {
-        if (true) {
+        if (!gameStop) {
             requestAnimationFrame(function () {
                 let x = objCamera.position[0];
                 let y = objCamera.position[1];
                 let z = objCamera.position[2];
 
                 objCamera.animate();
+                warpGate.animate();
 
                 let i, j;
 
@@ -379,6 +418,8 @@ function main() {
                         console.log("collision detected " + i);
                         if(gameObjects[i] instanceof PickAssetObject) {
                             onAssetPick(gameObjects[i]);
+                        } else if(gameObjects[i] instanceof WarpgateAssetObject) {
+                            onPortalEnter(gameObjects[i]);
                         }
                     }
                     for (j = 0; j < bulletObjects.length; j++) {

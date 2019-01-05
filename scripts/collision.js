@@ -63,10 +63,17 @@ class AlignedBoxCollision extends Collision {
     }
 
     static _checkBoxToBoxCollision(position1, width1, depth1, position2, width2, depth2) {
-        return position1[0] < position2[0] + width2 &&
-            position1[0] + width1 > position2[0] &&
-            position1[2] < position2[2] + depth2 &&
-            position1[2] + depth1 > position2[2];
+        // return position1[0] < position2[0] + width2 &&
+        //     position1[0] + width1 > position2[0] &&
+        //     position1[2] < position2[2] + depth2 &&
+        //     position1[2] + depth1 > position2[2];
+        if(Math.abs(position1[0] - position2[0]) > (width1 / 2 + width2 / 2)) {
+            return false;
+        }
+        if(Math.abs(position1[2] - position2[2]) > (depth1 / 2 + depth2 / 2)) {
+            return false;
+        }
+        return true;
     }
 }
 

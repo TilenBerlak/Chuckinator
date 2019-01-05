@@ -15,7 +15,7 @@ class Camera {
         this.yVelocity = 0;
         this.onGround = true;
         this.currentlyPressedKeys = {};
-        this.collision = new CylinderCollision(4, 2);
+        this.collision = new AlignedBoxCollision(4, 2, 4);
     }
 
     animate() {
