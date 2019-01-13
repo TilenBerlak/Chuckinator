@@ -1,2 +1,2 @@
 # Chuckinator
-FPS game made with WebGL
+FPS game made with JavaScript and WebGL.
