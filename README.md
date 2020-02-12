@@ -1,2 +1,3 @@
 # Chuckinator
-FPS game made with JavaScript and WebGL.
+
+Is a 3D first-person shooter game written in Javascript and WebGL.
